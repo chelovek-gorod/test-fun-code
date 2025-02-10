@@ -2,7 +2,7 @@ import { Assets } from 'pixi.js'
 import { fonts, uploadAssets } from './loader'
 import { initFontStyles } from './fonts'
 import { startGame } from '../game'
-import { EventHub, events } from './engine/events'
+import { EventHub, events, /*setLevel*/ } from './events'
 
 let level = null
 EventHub.on( events.setLevel, (data) => level = data )
@@ -17,14 +17,14 @@ Assets.loadBundle('fonts').then( fontsData => {
 })
 
 function awaitLevel() {
-    if (level) startGame(level)
+    if (level) return startGame(level)
     setTimeout(awaitLevel, 100)
     console.log("awaitLevel")
 }
 
-/*
 
-const level = [
+/*
+const levelTest = [
     [0, 0, 1, 1, 1, 0, 0, 1, 0],
     [1, 1, 1, 0, 1, 0, 0, 1, 0],
     [1, 0, 0, 0, 1, 0, 0, 1, 0],
@@ -34,5 +34,5 @@ const level = [
     [0, 0, 0, 1, 1, 1, 1, 1, 1],
 ]
 
-
+setTimeout( () => setLevel( levelTest ), 1000 )
 */
