@@ -6,6 +6,7 @@ export const events = {
     screenResize: 'screenResize',
     pointerMove: 'pointerMove',
 
+    setLevel: 'setLevel',
     setCommands: 'setCommands',
 }
 
@@ -18,6 +19,9 @@ export function pointerMove( data ) {
 
 export function setCommands( data ) {
     EventHub.emit( events.setCommands, data )
+}
+export function setLevel( data ) {
+    EventHub.emit( events.setLevel, data )
 }
 
 /*
