@@ -91,7 +91,7 @@ function screenResize(screenData) {
 
     console.log()
 
-    const scale = screenData.width / gameObjects.sizes.width
+    let scale = screenData.width / gameObjects.sizes.width
     if (scale > 1) scale = 1
     gameObjects.gameContainer.scale.set( scale )
 }
