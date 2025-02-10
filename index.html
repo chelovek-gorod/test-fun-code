@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en_EN">
+    <head>
+        <meta charset="UTF-8">
+        <!-- title and description -->
+        <title>mars game</title>
+        <meta name="description" content="Enjoy every moment">
+        <!-- viewport -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <!-- styles -->
+        <link rel="stylesheet" href="./style.css" type="text/css">
+        <!-- icons -->
+        <link rel="icon" type="image/x-icon" sizes="32x32" href="./icons/favicon.ico">
+        <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="./icons/touch-icon-iphone.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="./icons/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="./icons/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="152x152" href="./icons/touch-icon-ipad-retina.png">
+        <!-- open graph -->
+        <meta property="og:title" content="mars game" />
+        <meta property="og:image" content="./icons/og.png" /> <!-- OG image is 1200×630 pixels  -->
+        <meta property="og:description" content="Enjoy every moment" /> <!-- not important -->
+        <meta property="og:locale" content="en_EN" /> <!-- default: "en_US" -->
+    </head>
+
+    <body>
+        <div style="display: flex; width: 100%; height: 100%">
+            <div style="max-width: 56rem; height: 100%; min-width: 55%;"></div>
+            <div style="display: flex; width: 100%; justify-content: center; align-items: center; background-color: lime;">
+                <canvas id="canva" style="display: block; width: 100%; height: 100%;"></canvas>
+            </div>
+        </div>
+        <script type="module" src="./dev_js/engine/main.js"></script>
+    </body>
+</html>
