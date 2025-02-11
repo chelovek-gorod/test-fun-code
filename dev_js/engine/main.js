@@ -40,7 +40,9 @@ applyButton.onclick = () => {
     
     setLevel( data )
     helpText.remove()
-    applyButton.remove()
+
+    applyButton.innerText = 'ПЕРЕЗАПУСТИТЬ'
+    applyButton.onclick = () => location.reload()
 
     helpActionsText.style.display = "block"
     actionsStack.style.display = "block"
