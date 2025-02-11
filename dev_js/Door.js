@@ -1,6 +1,7 @@
 import { AnimatedSprite } from "pixi.js"
 import { sprites } from "./engine/loader"
 import { ITEM_TYPES } from "./constants"
+import { EventHub, events } from './engine/events'
 
 export default class Door extends AnimatedSprite {
     constructor(color, isLefRight) {
@@ -15,11 +16,19 @@ export default class Door extends AnimatedSprite {
         this.animationSpeed = 0.5
         this.loop = false
         this.gotoAndPlay(0)
+
+        EventHub.on( events.restart, this.restart, this )
+    }
+
+    restart() { console.log(sprites)
+        this.isOpen = false
+        this.textures = sprites.doors.animations[this.color + "_close"]
+        this.gotoAndPlay(0)
     }
 
     open() {
         this.isOpen = true
-        this.image.textures = sprites.doors.animations[this.color + "_open"]
+        this.textures = sprites.doors.animations[this.color + "_open"]
         this.gotoAndPlay(0)
     }
 }

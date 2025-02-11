@@ -11,7 +11,6 @@ import Door from "./Door"
 const game = {}
 
 export function startGame(gameData) {
-
     const screenData = getAppScreen()
 
     game.bg = new TilingSprite(sprites.bg_1)
@@ -29,6 +28,7 @@ export function startGame(gameData) {
     game.mainContainer.addChild(game.inventory)
 
     game.sizes = fillGameArea(game.ceilContainer, game.objectContainer, game.inventory, gameData)
+    game.inventory.itemsTargetX = game.sizes.width * 0.5
 
     EventHub.on( events.screenResize, screenResize )
     screenResize(screenData)

@@ -2,7 +2,7 @@ import { AnimatedSprite, Container, Sprite } from "pixi.js"
 import { sprites } from "./engine/loader"
 import { BOT_SPEED, DIRECTION, ACTIONS, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, ITEM_TYPES } from "./constants"
 import { tickerAdd, tickerRemove } from "./engine/application"
-import { EventHub, events } from './engine/events'
+import { EventHub, events, restart } from './engine/events'
 
 export default class Bot extends Container {
     constructor(x, y, area, side, inventory) {
@@ -52,6 +52,10 @@ export default class Bot extends Container {
         if (!("commands" in data) || !("callback" in data)) return
         if (data.commands.length === 0) return
 
+        restart()
+
+        this.idle()
+
         this.commands = data.commands.reverse()
         this.callback = data.callback
 
@@ -99,6 +103,8 @@ export default class Bot extends Container {
     }
 
     idle() {
+        restart()
+
         this.position.set(this.startX, this.startY)
         this.side = this.startSide
 
@@ -152,7 +158,19 @@ export default class Bot extends Container {
                     this.targetPoint.isOpen === true
                     const key = this.targetPoint.item
                     this.targetPoint.removeChild(key)
+                    key.position.set(this.targetPoint.position.x, this.targetPoint.position.y)
+                    this.targetPoint.parent.addChild(key)
                     this.inventory.addItem(key, 'key_' + key.color)
+                break
+
+                case ITEM_TYPES.door:
+                    if (this.inventory.checkItem( 'key_' + this.targetPoint.item.color )) {
+                        this.targetPoint.isOpen === true
+                        this.targetPoint.item.open()
+                    } else {
+                        this.callback(false)
+                        return this.idle()
+                    }
                 break
             }
         }

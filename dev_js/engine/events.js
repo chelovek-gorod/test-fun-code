@@ -8,6 +8,7 @@ export const events = {
 
     setLevel: 'setLevel',
     setCommands: 'setCommands',
+    restart: 'restart',
 }
 
 export function screenResize( data ) {
@@ -22,6 +23,9 @@ export function setCommands( data ) {
 }
 export function setLevel( data ) {
     EventHub.emit( events.setLevel, data )
+}
+export function restart( ) {
+    EventHub.emit( events.restart )
 }
 
 /*
