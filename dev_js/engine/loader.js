@@ -7,11 +7,17 @@ const paths = {
 }
 
 export const sprites = {
-    bg_1: 'bg_1.webp',
+    bg_1: 'trash_bg_5.png',
+
+    inventory_box: 'inventory_box.png',
+
     bot: 'bot.json',
     bot_shadow: 'bot_shadow.png',
     bot_target: 'bot_target.png',
-    ceil: 'ceil_1.png',
+    ceil: 'ceil_0.png',
+    doors: 'doors.json',
+    keys:'keys.json',
+
 }
 const spritesNumber = Object.keys(sprites).length
 for (let sprite in sprites) sprites[sprite] = paths.sprites + sprites[sprite]

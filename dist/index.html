@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en_EN">
+    <head>
+        <meta charset="UTF-8">
+        <!-- title and description -->
+        <title>mars game</title>
+        <meta name="description" content="Enjoy every moment">
+        <!-- viewport -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <!-- styles -->
+        <!-- icons -->
+        <link rel="icon" type="image/x-icon" sizes="32x32" href="./icons/favicon.ico">
+        <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="./icons/touch-icon-iphone.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="./icons/touch-icon-ipad.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="./icons/touch-icon-iphone-retina.png">
+        <link rel="apple-touch-icon" type="image/png" sizes="152x152" href="./icons/touch-icon-ipad-retina.png">
+        <!-- open graph -->
+        <meta property="og:title" content="mars game" />
+        <meta property="og:image" content="./icons/og.png" /> <!-- OG image is 1200×630 pixels  -->
+        <meta property="og:description" content="Enjoy every moment" /> <!-- not important -->
+        <meta property="og:locale" content="en_EN" /> <!-- default: "en_US" -->
+      <script type="module" crossorigin src="./assets/index-D0TApGmJ.js"></script>
+      <link rel="stylesheet" crossorigin href="./assets/index-f9Gfb4SE.css">
+    </head>
+
+    <body>
+        <div style="display: flex; width: 100%; height: 100%;">
+            <div style="max-width: 56rem; height: 100%; min-width: 55%; background-image: linear-gradient(45deg, aquamarine, aquamarine, lime)">
+                <div id="helpText" style="font-size: 16px; padding: 20px;">
+                    <b>"map" - карта</b><br>
+                     0 - пустота; 1 - пустая клетка; 2 - робот; 3 - целевая клетка;<br>
+                     41, 42, 43, 44 - Дверь ⬍ (красная, желтая, зеленая, синяя) - чтобы войти нужен ключ;<br>
+                     51, 52, 53, 54 - Дверь ⬌ (красная, желтая, зеленая, синяя) - чтобы войти нужен ключ;<br>
+                     61, 62, 63, 64 - Ключ (красный, желтый, зеленый, синий) наступил - собрал;<br>
+                     7 - оружие (можно толкнуть - сместится в клетку напротив бота) действие - сместит<br>
+                     8 - камень (можно толкнуть - сместится в клетку напротив бота) действие - сместит<br>
+                     9 - камень (можно толкнуть - сместится в клетку напротив бота) действие - сместит<br>
+                    <br>
+                    <b>"botDirection" - начальное направление робота</b><br>
+                    "left" - влево (смотрит в верхний левый угол)<br>
+                    "right" - вправо (смотрит в нижний правый угол)<br>
+                    "up" - вверх (смотрит в верхний правый угол)<br>
+                    "down" - вниз (смотрит в нижний левый угол)<br>
+                    <br>
+                    <b>"inventory" - список стартового инвентаря</b><br>
+                    "keyRed" - красный ключ<br>
+                    "keyYellow" - желтый ключ<br>
+                    "keyGreen" - зеленый ключ<br>
+                    "keyBlue" - синий ключ<br>
+                    "gun" - оружие (для атаки врага)<br>
+                </div>
+                <textarea id="testData" style="width: 100%; height: 250px; background-color: #00000077; color: white; font-weight: bold; font-size: 14px;"> 
+    {
+        "map":[
+            [ 0,  0,  1,  1,  1,  0,  0,  1,  1],
+            [ 1,  1,  1,  0,  1,  0,  0,  1,  0],
+            [ 1,  0,  0,  0,  1,  0,  0,  1,  0],
+            [ 1,  0,  1,  1,  1,  0,  0,  0,  0],
+            [41,  0,  1,  1,  0,  0,  1,  1, 61],
+            [ 1,  0,  1,  1,  0,  0,  1,  2,  1],
+            [ 3,  0,  0,  1,  1,  1,  1,  1,  1]
+        ],
+        "botDirection": "up",
+        "inventory":[]
+    }
+                </textarea>
+                <button id="applyTestData" style="display: block; margin: 5px auto; border-radius: 12px; font-size: 18px; font-weight: bold; padding: 4px 12px;">
+                    ПРИМЕНИТЬ
+                </button>
+                <div id="helpActionsText" style="font-size: 16px; padding: 20px 20px 0; display: none;">
+                    <b>ДОСТУПНЫЕ КОМАНДЫ:</b><br>
+                    ↷ (стрелка вправо) - повернуть направо;<br>
+                    ↶ (стрелка влево) - повернуть налево;<br>
+                    ⬆ (стрелка вверх) - Шаг вперед;<br>
+                    ✪ (пробел) - выполнить действие (применяется ключ или толкается камень)<br>
+                    <b>Enter</b> - Запустить выполнение команд<br>
+                    <br>
+                    <br><b>КОМАНДЫ:</b>
+                </div>
+                <div id="actionsStack" style="font-size: 16px; padding: 20px; display: none; background-color: #00000077; color: white; font-weight: bold;">
+
+                </div>
+            </div>
+            <div style="display: flex; width: 100%; justify-content: center; align-items: center; background-color: lime;">
+                <canvas id="canva" style="display: block; width: 100%; height: 100%;"></canvas>
+            </div>
+        </div>
+    </body>
+</html>

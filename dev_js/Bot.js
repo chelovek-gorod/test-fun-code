@@ -1,11 +1,11 @@
 import { AnimatedSprite, Container, Sprite } from "pixi.js"
 import { sprites } from "./engine/loader"
-import { BOT_SPEED, CEIL_SIZE, DIRECTION, ARROW, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE } from "./constants"
+import { BOT_SPEED, DIRECTION, ACTIONS, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, ITEM_TYPES } from "./constants"
 import { tickerAdd, tickerRemove } from "./engine/application"
 import { EventHub, events } from './engine/events'
 
 export default class Bot extends Container {
-    constructor(x, y, area, side = DIRECTION.down) {
+    constructor(x, y, area, side, inventory) {
         super()
 
         this.startX = x
@@ -14,6 +14,8 @@ export default class Bot extends Container {
 
         this.globalTargetX = 0
         this.globalTargetY = 0
+
+        this.inventory = inventory
 
         this.shadow = new Sprite( sprites.bot_shadow )
         this.shadow.anchor.set(0.5, 0.9)
@@ -113,7 +115,7 @@ export default class Bot extends Container {
 
         if (!action) return this.checkWin()
 
-        if (action === ARROW.forward) this.useMove()
+        if (action === ACTIONS.forward) this.useMove()
         else this.useTurn(action)
     }
 
@@ -137,16 +139,28 @@ export default class Bot extends Container {
 
     useMove() {
         this.targetPoint = this.getTargetPoint()
-        console.log('this.targetPoint', this.x, this.y, this.area)
+
         if (!this.targetPoint) {
             this.callback(false)
-            this.idle()
-        } else {
-            this.image.loop = false
-            this.image.textures = sprites.bot.animations["start_" + this.side]
-            this.image.onComplete = this.startMove.bind(this)
-            this.image.gotoAndPlay(0)
+            return this.idle()
         }
+        
+        // check ceil item
+        if (this.targetPoint.isOpen === false && this.targetPoint.item.type) {
+            switch(this.targetPoint.item.type) {
+                case ITEM_TYPES.key:
+                    this.targetPoint.isOpen === true
+                    const key = this.targetPoint.item
+                    this.targetPoint.removeChild(key)
+                    this.inventory.addItem(key, 'key_' + key.color)
+                break
+            }
+        }
+
+        this.image.loop = false
+        this.image.textures = sprites.bot.animations["start_" + this.side]
+        this.image.onComplete = this.startMove.bind(this)
+        this.image.gotoAndPlay(0)
     }
 
     startMove() {

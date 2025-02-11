@@ -18,7 +18,7 @@ class LoadingBar extends Container {
         super()
 
         this.text = new Text({
-            text:'0%',
+            text:'Загрузка: 0%',
             style:textStyles.loading
           })
         this.text.anchor.set(0.5, 1)
@@ -45,7 +45,7 @@ class LoadingBar extends Container {
 
     update(progress) {
         const range = Math.round(progress)
-        this.text.text = range + '%'
+        this.text.text = 'Загрузка: ' + range + '%'
     }
 }
 

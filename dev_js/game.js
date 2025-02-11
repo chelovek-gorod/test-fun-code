@@ -1,151 +1,161 @@
-import { Container, Sprite, TilingSprite } from "pixi.js"
-import { EventHub, events, setCommands } from './engine/events'
+import { Container, Sprite, AnimatedSprite, TilingSprite } from "pixi.js"
+import { EventHub, events } from './engine/events'
 import Bot from "./Bot"
-import { getAppScreen, sceneAdd, tickerAdd } from "./engine/application"
+import { getAppScreen, sceneAdd } from "./engine/application"
 import { sprites } from "./engine/loader"
-import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, BACKGROUND_SPEED, ARROW }  from "./constants"
+import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, MAP_OFFSET_TOP, KEY_COLORS_INDEX, ITEM_TYPES }  from "./constants"
+import Ceil from "./Ceil"
+import Inventory from "./Inventory"
+import Door from "./Door"
 
-const gameObjects = {}
+const game = {}
 
-export function startGame(level) {
+export function startGame(gameData) {
 
     const screenData = getAppScreen()
 
-    gameObjects.bg = new TilingSprite(sprites.bg_1)
-    gameObjects.bg.tick = (time) => gameObjects.bg.tilePosition.y += BACKGROUND_SPEED * time.deltaMS
-    tickerAdd(gameObjects.bg)
-    sceneAdd(gameObjects.bg)
+    game.bg = new TilingSprite(sprites.bg_1)
+    sceneAdd(game.bg)
 
-    gameObjects.gameContainer = new Container()
+    game.mainContainer = new Container()
 
-    gameObjects.ceils = new Container()
-    gameObjects.gameContainer.addChild(gameObjects.ceils)
+    game.ceilContainer = new Container()
+    game.mainContainer.addChild(game.ceilContainer)
 
-    gameObjects.units = new Container()
-    gameObjects.gameContainer.addChild(gameObjects.units)
+    game.objectContainer = new Container()
+    game.mainContainer.addChild(game.objectContainer)
 
-    gameObjects.sizes = fillGameArea(gameObjects.ceils, gameObjects.units, level)
-    sceneAdd( gameObjects.gameContainer )
+    game.inventory = new Inventory(gameData.inventory)
+    game.mainContainer.addChild(game.inventory)
+
+    game.sizes = fillGameArea(game.ceilContainer, game.objectContainer, game.inventory, gameData)
 
     EventHub.on( events.screenResize, screenResize )
-
     screenResize(screenData)
+
+    sceneAdd( game.mainContainer )
 }
 
 function screenResize(screenData) { 
-    gameObjects.bg.width = screenData.width
-    gameObjects.bg.height = screenData.height
+    game.bg.width = screenData.width
+    game.bg.height = screenData.height
 
-    console.log()
-
-    let scale = screenData.width / gameObjects.sizes.width
+    let scale = screenData.width / game.sizes.width
     if (scale > 1) scale = 1
-    gameObjects.gameContainer.scale.set( scale )
+    game.mainContainer.scale.set( scale )
+    if (scale === 1) {
+        game.mainContainer.position.x = (screenData.width - game.sizes.width * scale) * 0.5
+    }
+
+    game.inventory.position.y = CEIL_HALF_SIZE * scale
+    game.inventory.position.x = (game.sizes.width - game.inventory.width) * 0.5
 }
 
-function fillGameArea(ceils, units, level) {
+function fillGameArea(ceils, objects, inventory, gameData) {
+    const levelMap =  gameData.map
 
     const coordinates = [];
     let maxX = 0
     let maxY = 0
-    for (let i = 0; i < level.length; i++) {
-        for (let j = 0; j < level[i].length; j++) {
-            const x = j - i + (level.length - 1) // Новая координата x с наклоном влево
-            const y = i + j + 4 // Новая координата y
-            coordinates.push({ value: level[i][j], x, y })
-            if (maxX < x) maxX = x + 1
+    for (let i = 0; i < levelMap.length; i++) {
+        for (let j = 0; j < levelMap[i].length; j++) {
+            //Координаты x и y с наклоном влево
+            const x = (j - i + (levelMap.length - 1))
+            const y = (i + j)
+            coordinates.push({ value: levelMap[i][j], x, y })
+            if (maxX < x) maxX = x
             if (maxY < y) maxY = y
         }
     }
+
+    let targetX, targetY, bot
 
     coordinates.sort( (a, b) => a.y - b.y )
     coordinates.forEach( point => {
         switch(point.value) {
             case 1:
-                const ceil = new Sprite( sprites.ceil )
-                ceil.anchor.set(0.5, 0.25)
-                ceil.position.set(
-                    Math.round(point.x * CEIL_HALF_SIZE),
-                    Math.round(point.y * CEIL_QUARTER_SIZE)
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+                    )
                 )
-                ceils.addChild( ceil )
-                break;
+            break
             
             case 2:
-                const ceilBot = new Sprite( sprites.ceil )
-                ceilBot.anchor.set(0.5, 0.25)
-                ceilBot.position.set(
-                    Math.round(point.x * CEIL_HALF_SIZE),
-                    Math.round(point.y * CEIL_QUARTER_SIZE)
+                bot = new Bot(
+                    point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                    point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+                    , ceils, gameData.botDirection, inventory
                 )
-                ceils.addChild( ceilBot )
+                objects.addChild( bot )
 
-                gameObjects.bot = new Bot(
-                    Math.round(point.x * CEIL_HALF_SIZE),
-                    Math.round(point.y * CEIL_QUARTER_SIZE),
-                    ceils
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+                    )
                 )
-                units.addChild( gameObjects.bot )
-                break;
+            break
 
             case 3:
-                const ceilTarget = new Sprite( sprites.ceil )
-                ceilTarget.anchor.set(0.5, 0.25)
-                ceilTarget.position.set(
-                    Math.round(point.x * CEIL_HALF_SIZE),
-                    Math.round(point.y * CEIL_QUARTER_SIZE)
-                )
-                ceils.addChild( ceilTarget )
+                const target = new Sprite( sprites.bot_target )
+                target.anchor.set(0.5, 0.9)
+                target.type = ITEM_TYPES.target
 
-                gameObjects.target = new Sprite( sprites.bot_target )
-                gameObjects.target.anchor.set(0.5, 0.9)
-                gameObjects.target.position.set(
-                    Math.round(point.x * CEIL_HALF_SIZE),
-                    Math.round(point.y * CEIL_QUARTER_SIZE)
+                targetX = point.x * CEIL_HALF_SIZE + CEIL_SIZE
+                targetY = point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+
+                ceils.addChild( new Ceil( targetX, targetY, true, target ) )
+            break
+
+            case 41:
+            case 42:
+            case 43:
+            case 44:
+
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+                const doorColor = KEY_COLORS_INDEX[(point.value + '')[1]]
+                const door = new Door( doorColor, point.value > 50 )
+
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        false, door
+                    )
                 )
-                units.addChild( gameObjects.target )
-                break;
+            break
+
+            case 61:
+            case 62:
+            case 63:
+            case 64:
+                const keyColor = KEY_COLORS_INDEX[(point.value + '')[1]]
+                const key = new AnimatedSprite( sprites.keys.animations[ keyColor ] )
+                key.anchor.set(0.5, 0.7)
+                key.gotoAndPlay( Math.floor( Math.random() * key.textures.length ) )
+                key.type = ITEM_TYPES.key
+                key.color = keyColor
+
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        false, key
+                    )
+                )
+            break
         }
     })
 
-    gameObjects.bot.setTargetPoint( gameObjects.target.position.x, gameObjects.target.position.y )
-
+    bot.setTargetPoint( targetX, targetY )
+    
     return ({
-        width: Math.round(maxX * CEIL_HALF_SIZE),
-        height: Math.round(maxY * CEIL_QUARTER_SIZE)
+        width: maxX * CEIL_HALF_SIZE + CEIL_SIZE * 2,
+        height: maxY * CEIL_QUARTER_SIZE + CEIL_SIZE * 2 + MAP_OFFSET_TOP
     })
-}
-
-//////////////////////////////////////////////
-let commands = [] 
-document.addEventListener('keydown', (key) => {
-    switch(key.code) {
-        case "ArrowUp":
-            commands.push(ARROW.forward)
-            console.log(commands)
-            break
-
-        case "ArrowLeft":
-            commands.push(ARROW.left)
-            console.log(commands)
-            break
-
-        case "ArrowRight":
-            commands.push(ARROW.right)
-            console.log(commands)
-            break
-
-        case "Space":
-            setCommands({
-                commands: [...commands],
-                callback: commandsDone,
-            })
-            commands = []
-            break
-    }
-    // console.log(key.code)
-})
-
-function commandsDone(result) {
-    console.log('commandsDone', result)
 }
