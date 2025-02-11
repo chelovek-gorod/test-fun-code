@@ -43,6 +43,7 @@ applyButton.onclick = () => {
 
     applyButton.innerText = 'ПЕРЕЗАПУСТИТЬ'
     applyButton.onclick = () => location.reload()
+    applyButton.blur()
 
     helpActionsText.style.display = "block"
     actionsStack.style.display = "block"

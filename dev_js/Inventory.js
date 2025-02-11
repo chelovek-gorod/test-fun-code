@@ -1,17 +1,17 @@
-import { Container, Graphics, Sprite, TilingSprite } from "pixi.js"
+import { Container, AnimatedSprite, Sprite } from "pixi.js"
 import { EventHub, events } from './engine/events'
 import { tickerAdd } from "./engine/application"
 import { sprites } from "./engine/loader"
-import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, MAP_OFFSET_TOP, ACTIONS }  from "./constants"
+import { CEIL_SIZE, CEIL_HALF_SIZE, KEY_COLORS, ITEM_TYPES }  from "./constants"
 
 const slots = 5
 
 export default class Inventory extends Container {
-    constructor(items_list) {
+    constructor(items_list) { console.log('items_list', items_list)
         super()
 
-        this.restartSlots = [...items_list]
-        this.slots = items_list
+        this.restartSlots = []
+        this.slots = []
         this.collectedItems = []
 
         this.itemsTargetX = 0
@@ -22,6 +22,26 @@ export default class Inventory extends Container {
             slot.position.set(i * CEIL_SIZE, 0)
             this.addChild( slot )
         }
+
+        items_list.forEach( itemName => {
+            if (itemName.indexOf('key') > -1) {
+                console.log('key')
+                for( let color in KEY_COLORS) {
+                    if (itemName.indexOf(color) === 4) { console.log(color)
+                        const key = new AnimatedSprite( sprites.keys.animations[ color ] )
+                        key.anchor.set(0.5, 0.7)
+                        key.gotoAndPlay( Math.floor( Math.random() * key.textures.length ) )
+                        key.type = ITEM_TYPES.key
+                        key.color = color
+                        key.position.set(CEIL_HALF_SIZE + this.slots.length * CEIL_SIZE, CEIL_HALF_SIZE)
+                        this.addChild( key )
+
+                        this.restartSlots.push('key_' + color)
+                        this.slots.push('key_' + color)
+                    }
+                }
+            }
+        })
 
         tickerAdd(this)
 
@@ -36,7 +56,7 @@ export default class Inventory extends Container {
     addItem( item, item_name ) {
         this.collectedItems.push( item )
         item.targetPoint = {
-            x: CEIL_HALF_SIZE + this.slots.length * CEIL_HALF_SIZE,
+            x: CEIL_HALF_SIZE + this.slots.length * CEIL_SIZE,
             y: CEIL_HALF_SIZE
         }
         item.moveRate = {
