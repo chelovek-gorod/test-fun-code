@@ -7,6 +7,7 @@ import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, MAP_OFFSET_TOP, KEY_COLOR
 import Ceil from "./Ceil"
 import Inventory from "./Inventory"
 import Door from "./Door"
+import Cloud from "./Cloud"
 
 const game = {}
 
@@ -21,6 +22,9 @@ export function startGame(gameData) {
     game.ceilContainer = new Container()
     game.mainContainer.addChild(game.ceilContainer)
 
+    game.cloudContainer = new Container()
+    for(let i = 0; i < 50; i++) game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
+
     game.objectContainer = new Container()
     game.mainContainer.addChild(game.objectContainer)
 
@@ -33,6 +37,7 @@ export function startGame(gameData) {
     EventHub.on( events.screenResize, screenResize )
     screenResize(screenData)
 
+    sceneAdd( game.cloudContainer )
     sceneAdd( game.mainContainer )
 }
 
@@ -49,6 +54,8 @@ function screenResize(screenData) {
 
     game.inventory.position.y = CEIL_HALF_SIZE * scale
     game.inventory.position.x = (game.sizes.width - game.inventory.width) * 0.5
+
+    game.cloudContainer.children.forEach( cloud => cloud.setSizes(screenData.width, screenData.height, scale))
 }
 
 function fillGameArea(ceils, objects, inventory, gameData) {

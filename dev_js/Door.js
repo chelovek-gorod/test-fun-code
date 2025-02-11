@@ -20,7 +20,7 @@ export default class Door extends AnimatedSprite {
         EventHub.on( events.restart, this.restart, this )
     }
 
-    restart() { console.log(sprites)
+    restart() {
         this.isOpen = false
         this.textures = sprites.doors.animations[this.color + "_close"]
         this.gotoAndPlay(0)

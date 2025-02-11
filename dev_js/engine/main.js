@@ -87,5 +87,5 @@ document.addEventListener('keydown', (key) => {
 })
 
 function commandsDone(result) {
-    console.log('commandsDone', result)
+    alert('commandsDone', result)
 }

@@ -7,7 +7,8 @@ const paths = {
 }
 
 export const sprites = {
-    bg_1: 'trash_bg_5.png',
+    bg_1: 'trash_bg_6.png',
+    clouds: 'clouds.json',
 
     inventory_box: 'inventory_box.png',
 

@@ -7,7 +7,7 @@ import { CEIL_SIZE, CEIL_HALF_SIZE, KEY_COLORS, ITEM_TYPES }  from "./constants"
 const slots = 5
 
 export default class Inventory extends Container {
-    constructor(items_list) { console.log('items_list', items_list)
+    constructor(items_list) {
         super()
 
         this.restartSlots = []
@@ -25,9 +25,8 @@ export default class Inventory extends Container {
 
         items_list.forEach( itemName => {
             if (itemName.indexOf('key') > -1) {
-                console.log('key')
                 for( let color in KEY_COLORS) {
-                    if (itemName.indexOf(color) === 4) { console.log(color)
+                    if (itemName.indexOf(color) === 4) {
                         const key = new AnimatedSprite( sprites.keys.animations[ color ] )
                         key.anchor.set(0.5, 0.7)
                         key.gotoAndPlay( Math.floor( Math.random() * key.textures.length ) )
