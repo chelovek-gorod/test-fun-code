@@ -70,7 +70,7 @@ document.addEventListener('keydown', (key) => {
             break
 
         case "Space":
-            // commands.push(ACTIONS.use)
+            commands.push(ACTIONS.use)
             actionsStack.innerText += "✪"
             break
 
@@ -87,5 +87,5 @@ document.addEventListener('keydown', (key) => {
 })
 
 function commandsDone(result) {
-    alert('commandsDone', result)
+    alert('commandsDone - ' + result)
 }

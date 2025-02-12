@@ -63,7 +63,6 @@ export default class Inventory extends Container {
             y: (this.itemsTargetY - item.y) / 600
         }
         this.slots.push(item_name)
-        console.log('Inventory:', this.slots)
     }
 
     checkItem( item_name ) {

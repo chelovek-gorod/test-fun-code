@@ -8,6 +8,8 @@ import Ceil from "./Ceil"
 import Inventory from "./Inventory"
 import Door from "./Door"
 import Cloud from "./Cloud"
+import Stone from "./Stone"
+import Monster from "./Monster"
 
 const game = {}
 
@@ -24,9 +26,6 @@ export function startGame(gameData) {
 
     game.cloudContainer = new Container()
     for(let i = 0; i < 50; i++) game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
-
-    game.objectContainer = new Container()
-    game.mainContainer.addChild(game.objectContainer)
 
     game.inventory = new Inventory(gameData.inventory)
     game.mainContainer.addChild(game.inventory)
@@ -75,8 +74,6 @@ function fillGameArea(ceils, objects, inventory, gameData) {
         }
     }
 
-    let targetX, targetY, bot
-
     coordinates.sort( (a, b) => a.y - b.y )
     coordinates.forEach( point => {
         switch(point.value) {
@@ -90,17 +87,13 @@ function fillGameArea(ceils, objects, inventory, gameData) {
             break
             
             case 2:
-                bot = new Bot(
-                    point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                    point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
-                    , ceils, gameData.botDirection, inventory
-                )
-                objects.addChild( bot )
+                const bot = new Bot( ceils, gameData.botDirection, inventory )
 
                 ceils.addChild(
                     new Ceil(
                         point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        bot
                     )
                 )
             break
@@ -110,10 +103,13 @@ function fillGameArea(ceils, objects, inventory, gameData) {
                 target.anchor.set(0.5, 0.9)
                 target.type = ITEM_TYPES.target
 
-                targetX = point.x * CEIL_HALF_SIZE + CEIL_SIZE
-                targetY = point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
-
-                ceils.addChild( new Ceil( targetX, targetY, true, target ) )
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        target
+                    )
+                )
             break
 
             case 41:
@@ -132,7 +128,7 @@ function fillGameArea(ceils, objects, inventory, gameData) {
                     new Ceil(
                         point.x * CEIL_HALF_SIZE + CEIL_SIZE,
                         point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        false, door
+                        door
                     )
                 )
             break
@@ -152,14 +148,52 @@ function fillGameArea(ceils, objects, inventory, gameData) {
                     new Ceil(
                         point.x * CEIL_HALF_SIZE + CEIL_SIZE,
                         point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        false, key
+                        key
+                    )
+                )
+            break
+
+            case 7:
+                const gun = new AnimatedSprite( sprites.gun.animations.gun )
+                gun.anchor.set(0.5, 0.7)
+                gun.gotoAndPlay( Math.floor( Math.random() * gun.textures.length ) )
+                gun.type = ITEM_TYPES.gun
+
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        gun
+                    )
+                )
+            break
+
+            case 8:
+                const stone = new Stone()
+                ceils.addChild( 
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        stone
+                    )
+                )
+            break
+
+            case 91:
+            case 92:
+                const monsterSide = +((point.value + '')[1])
+                const monster = new Monster( monsterSide )
+
+                ceils.addChild(
+                    new Ceil(
+                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
+                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
+                        monster
                     )
                 )
             break
         }
     })
-
-    bot.setTargetPoint( targetX, targetY )
     
     return ({
         width: maxX * CEIL_HALF_SIZE + CEIL_SIZE * 2,

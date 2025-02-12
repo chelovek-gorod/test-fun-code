@@ -18,7 +18,9 @@ export const sprites = {
     ceil: 'ceil_0.png',
     doors: 'doors.json',
     keys:'keys.json',
-
+    gun:'gun.json',
+    monster:'monster.json',
+    static_stone: 'static_stone.png'
 }
 const spritesNumber = Object.keys(sprites).length
 for (let sprite in sprites) sprites[sprite] = paths.sprites + sprites[sprite]

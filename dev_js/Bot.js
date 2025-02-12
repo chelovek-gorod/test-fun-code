@@ -1,19 +1,13 @@
 import { AnimatedSprite, Container, Sprite } from "pixi.js"
 import { sprites } from "./engine/loader"
-import { BOT_SPEED, DIRECTION, ACTIONS, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, ITEM_TYPES } from "./constants"
+import { BOT_SPEED, DIRECTION, ACTIONS, ITEM_TYPES, CEIL_OFFSET, STONE_SPEED } from "./constants"
 import { tickerAdd, tickerRemove } from "./engine/application"
 import { EventHub, events, restart } from './engine/events'
 
 export default class Bot extends Container {
-    constructor(x, y, area, side, inventory) {
+    constructor(area, side, inventory) {
         super()
-
-        this.startX = x
-        this.startY = y
         this.startSide = side
-
-        this.globalTargetX = 0
-        this.globalTargetY = 0
 
         this.inventory = inventory
 
@@ -27,12 +21,14 @@ export default class Bot extends Container {
         this.image.scale.set(0.75)
         this.addChild(this.image)
 
-        this.position.set(x, y)
-
         this.area = area.children
 
         this.side = side
-        this.targetPoint = null
+        this.targetCeil = null
+        this.targetX = 0
+        this.targetY = 0
+
+        this.speed = BOT_SPEED
 
         this.commands = []
         this.callback = null
@@ -43,23 +39,17 @@ export default class Bot extends Container {
         EventHub.on( events.setCommands, this.setCommands, this )
     }
 
-    setTargetPoint( x, y ) {
-        this.globalTargetX = x
-        this.globalTargetY = y
-    }
-
     setCommands( data ) {
         if (!("commands" in data) || !("callback" in data)) return
-        if (data.commands.length === 0) return
+        if (!Array.isArray(data.commands) || data.commands.length === 0) return
 
         restart()
 
+        this.callback = null // !!! this.idle call callback if callback not null
         this.idle()
 
         this.commands = data.commands.reverse()
         this.callback = data.callback
-
-        this.position.set(this.startX, this.startY)
 
         this.checkAction()
     }
@@ -73,42 +63,27 @@ export default class Bot extends Container {
         }
     }
 
-    getTargetPoint() {
-        switch( this.side ) {
-            case DIRECTION.left:
-                return (
-                    this.area.find(
-                        p => p.x === this.x - CEIL_HALF_SIZE && p.y === this.y - CEIL_QUARTER_SIZE
-                    )
-                )
-            case DIRECTION.right:
-                return (
-                    this.area.find(
-                        p => p.x === this.x + CEIL_HALF_SIZE && p.y === this.y + CEIL_QUARTER_SIZE
-                    )
-                )
-            case DIRECTION.up:
-                return (
-                    this.area.find(
-                        p => p.x === this.x + CEIL_HALF_SIZE && p.y === this.y - CEIL_QUARTER_SIZE
-                    )
-                )
-            case DIRECTION.down:
-                return (
-                    this.area.find(
-                        p => p.x === this.x - CEIL_HALF_SIZE && p.y === this.y + CEIL_QUARTER_SIZE
-                    )
-                )
-        }
+    getTargetPoint(x, y) {
+        const offset = CEIL_OFFSET[this.side]
+        if (!offset) return null
+
+        return this.area.find(p => p.x === x + offset.dx && p.y === y + offset.dy)
     }
 
     idle() {
         restart()
 
-        this.position.set(this.startX, this.startY)
+        tickerRemove(this)
+
+        this.position.set(0, 0)
         this.side = this.startSide
 
-        this.callback = null
+        this.speed = BOT_SPEED
+
+        if (this.callback) {
+            this.callback(false)
+            this.callback = null
+        }
         this.commands = []
 
         this.image.textures = sprites.bot.animations["idle_" + this.side]
@@ -118,17 +93,46 @@ export default class Bot extends Container {
 
     checkAction() {
         const action = this.commands.pop()
-
-        if (!action) return this.checkWin()
+        if (!action && this.parent.item) {
+            const isWin = this.parent.item.type === ITEM_TYPES.target
+            if (isWin) return this.callback( isWin )
+            else return this.idle()
+        }
 
         if (action === ACTIONS.forward) this.useMove()
+        else if (action === ACTIONS.use) this.useItem()
         else this.useTurn(action)
     }
 
-    checkWin() {
-        if (this.x === this.globalTargetX
-        && this.y === this.globalTargetY
-        && this.callback) return this.callback(true)
+    useItem() {
+        this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
+        if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
+
+        if (this.targetCeil.item.type === ITEM_TYPES.stone) {
+            const ceilAfterStone = this.getTargetPoint(this.targetCeil.x, this.targetCeil.y)
+
+            // check that ceil exist and ceil without any items
+            if (!ceilAfterStone || ceilAfterStone.item ) return this.idle()
+
+            this.speed = STONE_SPEED
+            this.image.loop = false
+            this.image.textures = sprites.bot.animations["start_" + this.side]
+            this.image.onComplete = () => {
+                this.targetCeil.item.move( this.side, ceilAfterStone )
+                this.startMove()
+            }
+            this.image.gotoAndPlay(0)
+
+            return
+        }
+
+        if (this.targetCeil.item.type === ITEM_TYPES.monster) {
+            // check gun
+            if (!this.inventory.checkItem( ITEM_TYPES.gun )) return this.idle()
+
+            this.targetCeil.item.getShut()
+            return this.checkAction()
+        }
 
         return this.idle()
     }
@@ -144,36 +148,10 @@ export default class Bot extends Container {
     }
 
     useMove() {
-        this.targetPoint = this.getTargetPoint()
+        this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
 
-        if (!this.targetPoint) {
-            this.callback(false)
-            return this.idle()
-        }
-        
-        // check ceil item
-        if (this.targetPoint.isOpen === false && this.targetPoint.item.type) {
-            switch(this.targetPoint.item.type) {
-                case ITEM_TYPES.key:
-                    this.targetPoint.isOpen === true
-                    const key = this.targetPoint.item
-                    this.targetPoint.removeChild(key)
-                    key.position.set(this.targetPoint.position.x, this.targetPoint.position.y)
-                    this.targetPoint.parent.addChild(key)
-                    this.inventory.addItem(key, 'key_' + key.color)
-                break
-
-                case ITEM_TYPES.door:
-                    if (this.inventory.checkItem( 'key_' + this.targetPoint.item.color )) {
-                        this.targetPoint.isOpen === true
-                        this.targetPoint.item.open()
-                    } else {
-                        this.callback(false)
-                        return this.idle()
-                    }
-                break
-            }
-        }
+        if (!this.targetCeil) return this.idle()
+        if (!this.targetCeil.checkMove( this.inventory )) return this.idle()
 
         this.image.loop = false
         this.image.textures = sprites.bot.animations["start_" + this.side]
@@ -182,13 +160,32 @@ export default class Bot extends Container {
     }
 
     startMove() {
+        if (CEIL_OFFSET[this.side].dy > 0) {
+            this.parent.removeChild(this)
+            this.targetCeil.addChild(this)
+            this.targetX = 0
+            this.targetY = 0
+            this.position.set(-CEIL_OFFSET[this.side].dx, -CEIL_OFFSET[this.side].dy)
+        } else {
+            this.targetX = CEIL_OFFSET[this.side].dx
+            this.targetY = CEIL_OFFSET[this.side].dy
+        }
+
         tickerAdd(this)
-        this.image.onComplete = this.checkAction.bind(this)
+        // this.image.onComplete = this.checkAction.bind(this)
     }
 
     endMove() {
         tickerRemove(this)
-        this.position.set(this.targetPoint.x, this.targetPoint.y)
+
+        this.speed = BOT_SPEED
+
+        if (CEIL_OFFSET[this.side].dy < 0) {
+            this.parent.removeChild(this)
+            this.targetCeil.addChild(this)
+            this.position.set(0, 0)
+        }
+        
         this.image.textures = sprites.bot.animations["stop_" + this.side]
         this.image.onComplete = this.checkAction.bind(this)
         this.image.gotoAndPlay(0)
@@ -197,24 +194,24 @@ export default class Bot extends Container {
     tick(time) {
         switch( this.side ) {
             case DIRECTION.left:
-                this.position.x -= BOT_SPEED * time.deltaMS
-                this.position.y -= BOT_SPEED * 0.5 * time.deltaMS
-                if (this.position.x <= this.targetPoint.x) return this.endMove()
+                this.position.x -= this.speed * time.deltaMS
+                this.position.y -= this.speed * 0.5 * time.deltaMS
+                if (this.position.x <= this.targetX) return this.endMove()
                 break
             case DIRECTION.right:
-                this.position.x += BOT_SPEED * time.deltaMS
-                this.position.y += BOT_SPEED * 0.5 * time.deltaMS
-                if (this.position.x >= this.targetPoint.x) return this.endMove()
+                this.position.x += this.speed * time.deltaMS
+                this.position.y += this.speed * 0.5 * time.deltaMS
+                if (this.position.x >= this.targetX) return this.endMove()
                 break
             case DIRECTION.up:
-                this.position.x += BOT_SPEED * time.deltaMS
-                this.position.y -= BOT_SPEED * 0.5 * time.deltaMS
-                if (this.position.y <= this.targetPoint.y) return this.endMove()
+                this.position.x += this.speed * time.deltaMS
+                this.position.y -= this.speed * 0.5 * time.deltaMS
+                if (this.position.y <= this.targetY) return this.endMove()
                 break
             case DIRECTION.down:
-                this.position.x -= BOT_SPEED * time.deltaMS
-                this.position.y += BOT_SPEED * 0.5 * time.deltaMS
-                if (this.position.y >= this.targetPoint.y) return this.endMove()
+                this.position.x -= this.speed * time.deltaMS
+                this.position.y += this.speed * 0.5 * time.deltaMS
+                if (this.position.y >= this.targetY) return this.endMove()
                 break
         }
     }
