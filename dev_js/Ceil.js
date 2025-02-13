@@ -4,10 +4,11 @@ import { ITEM_TYPES }  from "./constants"
 import { EventHub, events } from './engine/events'
 
 export default class Ceil extends Container {
-    constructor(x, y, item = null) {
+    constructor(x, y, isBright, item = null) {
         super()
-        this.ceil = new Sprite( sprites.ceil )
-        this.ceil.anchor.set(0.5, 0.2)
+        const ceilName = 'ceil_' + Math.ceil(Math.random() * 3) + (isBright ? 'w' : 'b')
+        this.ceil = new Sprite( sprites[ ceilName ] )
+        this.ceil.anchor.set(0.5)
         this.addChild(this.ceil)
 
         this.isOpen = (item === null || item.type === ITEM_TYPES.target) ? true : false

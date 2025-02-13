@@ -1,44 +1,65 @@
-import { Container, AnimatedSprite, Sprite } from "pixi.js"
+import { Container, Sprite } from "pixi.js"
 import { EventHub, events } from './engine/events'
 import { tickerAdd } from "./engine/application"
 import { sprites } from "./engine/loader"
-import { CEIL_SIZE, CEIL_HALF_SIZE, KEY_COLORS, ITEM_TYPES }  from "./constants"
-
-const slots = 5
+import Item from "./Item"
+import { CEIL_SIZE, KEY_COLORS, ITEM_TYPES, INVENTORY_SLOTS, INVENTORY_WIDTH, INVENTORY_CEIL_SIZE }  from "./constants"
 
 export default class Inventory extends Container {
     constructor(items_list) {
         super()
 
-        this.restartSlots = []
-        this.slots = []
-        this.collectedItems = []
+        this.restartSlots = [] // items names that get at start
+        this.slots = [] // items names
+        this.slotsPoints = [] // {x, y}
 
-        this.itemsTargetX = 0
-        this.itemsTargetY = CEIL_SIZE
+        this.collectedItems = [] // just collected items, that moving to own slots points (in ticker)
+        this.itemsTargetX = 0 // moving to slots points x
+        this.itemsTargetY = CEIL_SIZE // moving to slots points y
 
-        for (var i = 0; i < slots; i++) {
+        const startSlotX = (INVENTORY_CEIL_SIZE - INVENTORY_WIDTH) * 0.5
+        const startSlotY = INVENTORY_CEIL_SIZE * 0.5
+        for (var i = 0; i < INVENTORY_SLOTS; i++) {
+            const slotX = startSlotX + i * INVENTORY_CEIL_SIZE
+
             const slot = new Sprite(sprites.inventory_box)
-            slot.position.set(i * CEIL_SIZE, 0)
+            slot.anchor.set(0.5)
+            slot.position.set(slotX, startSlotY)
             this.addChild( slot )
+            this.slotsPoints.push( {x: slotX, y: startSlotY} )
         }
 
         items_list.forEach( itemName => {
             if (itemName.indexOf('key') > -1) {
                 for( let color in KEY_COLORS) {
                     if (itemName.indexOf(color) === 4) {
-                        const key = new AnimatedSprite( sprites.keys.animations[ color ] )
-                        key.anchor.set(0.5, 0.7)
-                        key.gotoAndPlay( Math.floor( Math.random() * key.textures.length ) )
-                        key.type = ITEM_TYPES.key
-                        key.color = color
-                        key.position.set(CEIL_HALF_SIZE + this.slots.length * CEIL_SIZE, CEIL_HALF_SIZE)
+                        const key = new Item( {
+                            type: ITEM_TYPES.key,
+                            color: color,
+                            textures: sprites.keys.animations[ color ]
+                        }, true)
+                        key.position.set(
+                            this.slotsPoints[this.slots.length].x, this.slotsPoints[this.slots.length].y
+                        )
                         this.addChild( key )
 
                         this.restartSlots.push('key_' + color)
                         this.slots.push('key_' + color)
                     }
                 }
+            }
+            if (itemName === 'gun') {
+                const gun = new Item( {
+                    type: ITEM_TYPES.gun,
+                    textures: sprites.gun.animations.gun
+                }, true)
+                key.position.set(
+                    this.slotsPoints[this.slots.length].x, this.slotsPoints[this.slots.length].y
+                )
+                this.addChild( gun )
+
+                this.restartSlots.push('gun')
+                this.slots.push('gun')
             }
         })
 
@@ -55,8 +76,8 @@ export default class Inventory extends Container {
     addItem( item, item_name ) {
         this.collectedItems.push( item )
         item.targetPoint = {
-            x: CEIL_HALF_SIZE + this.slots.length * CEIL_SIZE,
-            y: CEIL_HALF_SIZE
+            x: this.slotsPoints[this.slots.length].x,
+            y: this.slotsPoints[this.slots.length].y
         }
         item.moveRate = {
             x: (this.itemsTargetX - item.x) / 600,
@@ -92,6 +113,7 @@ export default class Inventory extends Container {
                 item.parent.removeChild( item )
                 this.addChild(item)
                 item.position.set(item.targetPoint.x, item.targetPoint.y)
+                item.anchor.set(0.5)
                 item.targetPoint = null
             }
         })

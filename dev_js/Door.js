@@ -5,8 +5,10 @@ import { EventHub, events } from './engine/events'
 
 export default class Door extends AnimatedSprite {
     constructor(color, isLefRight) {
-        super(sprites.doors.animations[color + "_close"])
-        this.anchor.set(0.5, 0.8)
+        //super(sprites.doors.animations[color + "_close"])
+        //this.anchor.set(0.5, 0.8)
+        super(sprites['gate_' + color].animations['gate_' + color + '_open'])
+        this.anchor.set(0.5, 1)
         if (isLefRight) this.scale.set( -1 , 1 )
         this.color = color
 
@@ -15,20 +17,18 @@ export default class Door extends AnimatedSprite {
 
         this.animationSpeed = 0.5
         this.loop = false
-        this.gotoAndPlay(0)
+        this.gotoAndStop(0)
 
         EventHub.on( events.restart, this.restart, this )
     }
 
     restart() {
         this.isOpen = false
-        this.textures = sprites.doors.animations[this.color + "_close"]
-        this.gotoAndPlay(0)
+        this.gotoAndStop(0)
     }
 
     open() {
         this.isOpen = true
-        this.textures = sprites.doors.animations[this.color + "_open"]
         this.gotoAndPlay(0)
     }
 }

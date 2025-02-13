@@ -3,13 +3,16 @@ import { EventHub, events } from './engine/events'
 import Bot from "./Bot"
 import { getAppScreen, sceneAdd } from "./engine/application"
 import { sprites } from "./engine/loader"
-import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE, MAP_OFFSET_TOP, KEY_COLORS_INDEX, ITEM_TYPES }  from "./constants"
+import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE,
+    MAP_OFFSET, MAP_OFFSET_TOP, INVENTORY_WIDTH,
+    KEY_COLORS_INDEX, ITEM_TYPES, CLOUDS, INVENTORY_CEIL_SIZE }  from "./constants"
 import Ceil from "./Ceil"
 import Inventory from "./Inventory"
 import Door from "./Door"
 import Cloud from "./Cloud"
 import Stone from "./Stone"
 import Monster from "./Monster"
+import Item from "./Item"
 
 const game = {}
 
@@ -25,12 +28,14 @@ export function startGame(gameData) {
     game.mainContainer.addChild(game.ceilContainer)
 
     game.cloudContainer = new Container()
-    for(let i = 0; i < 50; i++) game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
+    for(let i = 0; i < CLOUDS.count; i++) {
+        game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
+    }
 
     game.inventory = new Inventory(gameData.inventory)
     game.mainContainer.addChild(game.inventory)
 
-    game.sizes = fillGameArea(game.ceilContainer, game.objectContainer, game.inventory, gameData)
+    game.sizes = fillGameArea(game.ceilContainer, game.inventory, gameData)
     game.inventory.itemsTargetX = game.sizes.width * 0.5
 
     EventHub.on( events.screenResize, screenResize )
@@ -51,27 +56,34 @@ function screenResize(screenData) {
         game.mainContainer.position.x = (screenData.width - game.sizes.width * scale) * 0.5
     }
 
-    game.inventory.position.y = CEIL_HALF_SIZE * scale
-    game.inventory.position.x = (game.sizes.width - game.inventory.width) * 0.5
+    if (scale > 0.75) game.inventory.scale.set(0.75)
+    game.inventory.position.x = game.sizes.width * 0.5
+    game.inventory.position.y = MAP_OFFSET * 0.5
 
     game.cloudContainer.children.forEach( cloud => cloud.setSizes(screenData.width, screenData.height, scale))
 }
 
-function fillGameArea(ceils, objects, inventory, gameData) {
+function fillGameArea(ceils, inventory, gameData) {
     const levelMap =  gameData.map
 
     const coordinates = [];
     let maxX = 0
     let maxY = 0
+    let isEvenNumberCells = levelMap[0].length % 2 === 0
+    let isBright = true
     for (let i = 0; i < levelMap.length; i++) {
         for (let j = 0; j < levelMap[i].length; j++) {
             //Координаты x и y с наклоном влево
             const x = (j - i + (levelMap.length - 1))
             const y = (i + j)
-            coordinates.push({ value: levelMap[i][j], x, y })
+            isBright = !isBright
+  
+            coordinates.push({ value: levelMap[i][j], x, y, isBright })
+
             if (maxX < x) maxX = x
             if (maxY < y) maxY = y
         }
+        if (isEvenNumberCells) isBright = !isBright
     }
 
     coordinates.sort( (a, b) => a.y - b.y )
@@ -80,8 +92,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
             case 1:
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright
                     )
                 )
             break
@@ -91,9 +104,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        bot
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, bot
                     )
                 )
             break
@@ -105,9 +118,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        target
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, target
                     )
                 )
             break
@@ -126,9 +139,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        door
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, door
                     )
                 )
             break
@@ -138,32 +151,32 @@ function fillGameArea(ceils, objects, inventory, gameData) {
             case 63:
             case 64:
                 const keyColor = KEY_COLORS_INDEX[(point.value + '')[1]]
-                const key = new AnimatedSprite( sprites.keys.animations[ keyColor ] )
-                key.anchor.set(0.5, 0.7)
-                key.gotoAndPlay( Math.floor( Math.random() * key.textures.length ) )
-                key.type = ITEM_TYPES.key
-                key.color = keyColor
+                const key = new Item( {
+                    type: ITEM_TYPES.key,
+                    color: keyColor,
+                    textures: sprites.keys.animations[ keyColor ]
+                })
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        key
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, key
                     )
                 )
             break
 
             case 7:
-                const gun = new AnimatedSprite( sprites.gun.animations.gun )
-                gun.anchor.set(0.5, 0.7)
-                gun.gotoAndPlay( Math.floor( Math.random() * gun.textures.length ) )
-                gun.type = ITEM_TYPES.gun
+                const gun = new Item( {
+                    type: ITEM_TYPES.gun,
+                    textures: sprites.gun.animations.gun
+                })
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        gun
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, gun
                     )
                 )
             break
@@ -172,9 +185,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
                 const stone = new Stone()
                 ceils.addChild( 
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        stone
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, stone
                     )
                 )
             break
@@ -186,9 +199,9 @@ function fillGameArea(ceils, objects, inventory, gameData) {
 
                 ceils.addChild(
                     new Ceil(
-                        point.x * CEIL_HALF_SIZE + CEIL_SIZE,
-                        point.y * CEIL_QUARTER_SIZE + CEIL_SIZE + MAP_OFFSET_TOP,
-                        monster
+                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                        point.isBright, monster
                     )
                 )
             break
@@ -196,7 +209,7 @@ function fillGameArea(ceils, objects, inventory, gameData) {
     })
     
     return ({
-        width: maxX * CEIL_HALF_SIZE + CEIL_SIZE * 2,
-        height: maxY * CEIL_QUARTER_SIZE + CEIL_SIZE * 2 + MAP_OFFSET_TOP
+        width: maxX * CEIL_HALF_SIZE + MAP_OFFSET * 2,
+        height: maxY * CEIL_QUARTER_SIZE + MAP_OFFSET + MAP_OFFSET_TOP
     })
 }

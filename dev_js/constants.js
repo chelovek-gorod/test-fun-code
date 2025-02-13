@@ -1,8 +1,11 @@
 export const CEIL_SIZE = 128
 export const CEIL_HALF_SIZE = Math.round(CEIL_SIZE * 0.5)
 export const CEIL_QUARTER_SIZE = Math.round(CEIL_HALF_SIZE * 0.5)
-export const INVENTORY_CEIL_SIZE = 128
-export const MAP_OFFSET_TOP = INVENTORY_CEIL_SIZE + CEIL_SIZE
+export const INVENTORY_SLOTS = 5
+export const INVENTORY_CEIL_SIZE = CEIL_SIZE
+export const INVENTORY_WIDTH = INVENTORY_SLOTS * INVENTORY_CEIL_SIZE
+export const MAP_OFFSET = CEIL_SIZE
+export const MAP_OFFSET_TOP = MAP_OFFSET * 2 + INVENTORY_CEIL_SIZE
 
 export const UI_WIDTH = 300
 export const ARROW_ANIMATION_DURATION = 200
@@ -45,4 +48,13 @@ export const KEY_COLORS_INDEX = {
     2: KEY_COLORS.yellow,
     3: KEY_COLORS.green,
     4: KEY_COLORS.blue
+}
+
+export const CLOUDS = {
+    scale: 0.75,
+    count: 75,
+    minSpeed: 0.05,
+    maxSpeed: 0.1,
+    speedRateX: 0.6,
+    speedRateY: -0.3
 }

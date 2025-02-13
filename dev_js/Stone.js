@@ -7,7 +7,7 @@ import { tickerAdd, tickerRemove } from "./engine/application"
 export default class Stone extends Sprite {
     constructor() {
         super(sprites.static_stone)
-        this.anchor.set(0.5)
+        this.anchor.set(0.5, 0.75)
         this.position.set(0, 0)
 
         this.type = ITEM_TYPES.stone

@@ -91,12 +91,13 @@ export default class Bot extends Container {
         this.image.play()
     }
 
-    checkAction() {
+    checkAction() { console.log('get action', this.commands.length ? this.commands[this.commands.length -1] : '[ ]' )
         const action = this.commands.pop()
-        if (!action && this.parent.item) {
-            const isWin = this.parent.item.type === ITEM_TYPES.target
-            if (isWin) return this.callback( isWin )
-            else return this.idle()
+        if (!action) {
+            if(this.parent.item && this.parent.item.type === ITEM_TYPES.target) {
+                return this.callback( true )
+            }
+            return this.idle()
         }
 
         if (action === ACTIONS.forward) this.useMove()

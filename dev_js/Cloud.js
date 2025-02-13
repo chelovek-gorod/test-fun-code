@@ -1,4 +1,5 @@
 import { Sprite } from "pixi.js"
+import { CLOUDS } from "./constants"
 import { tickerAdd } from "./engine/application"
 import { sprites } from "./engine/loader"
 
@@ -7,12 +8,12 @@ export default class Cloud extends Sprite {
         super(sprites.clouds.textures["cloud_" + textureIndex])
         this.anchor.set(0.5)
 
-        this.scaleRateX = Math.random() < 0.5 ? -1 : 1
-        this.scaleRateY = Math.random() < 0.5 ? -1 : 1
+        this.scaleRateX = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
+        this.scaleRateY = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
 
-        this.speed = 0.05 + Math.random() * 0.05
-        this.speedX = this.speed * 0.4
-        this.speedY = this.speed * -0.2
+        this.speed = CLOUDS.minSpeed + Math.random() * (CLOUDS.maxSpeed - CLOUDS.minSpeed)
+        this.speedX = this.speed * CLOUDS.speedRateX
+        this.speedY = this.speed * CLOUDS.speedRateY
 
         this.isReady = false
 
