@@ -2,7 +2,7 @@ import { Assets } from 'pixi.js'
 import { fonts, uploadAssets } from './loader'
 import { initFontStyles } from './fonts'
 import { startGame } from '../game'
-import { EventHub, events, setLevel, setCommands } from './events'
+import { EventHub, events, setLevel, setCommands, changeBg, stopBg, showTestBot } from './events'
 import { ACTIONS } from "../constants"
 
 let level = null
@@ -69,6 +69,16 @@ document.addEventListener('keydown', (key) => {
             actionsStack.innerText += "↷"
             break
 
+        case "ArrowDown":
+            changeBg()
+            break
+        case "KeyS":
+            stopBg()
+            break
+        case "KeyT":
+            showTestBot()
+            break
+
         case "Space":
             commands.push(ACTIONS.use)
             actionsStack.innerText += "✪"
@@ -83,7 +93,7 @@ document.addEventListener('keydown', (key) => {
             commands = []
             break
     }
-    // console.log(key.code)
+    console.log(key.code)
 })
 
 function commandsDone(result) {

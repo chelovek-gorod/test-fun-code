@@ -1,7 +1,7 @@
 import { Container, Sprite, AnimatedSprite, TilingSprite } from "pixi.js"
 import { EventHub, events } from './engine/events'
 import Bot from "./Bot"
-import { getAppScreen, sceneAdd } from "./engine/application"
+import { getAppScreen, sceneAdd, tickerAdd, tickerRemove } from "./engine/application"
 import { sprites } from "./engine/loader"
 import { CEIL_SIZE, CEIL_HALF_SIZE, CEIL_QUARTER_SIZE,
     MAP_OFFSET, MAP_OFFSET_TOP, INVENTORY_WIDTH,
@@ -20,6 +20,23 @@ export function startGame(gameData) {
     const screenData = getAppScreen()
 
     game.bg = new TilingSprite(sprites.bg_1)
+    game.bg.index = 1
+    game.bg.tick = (time) => {
+        game.bg.tilePosition.x -= 0.004 * time.deltaMS
+        game.bg.tilePosition.y += 0.002 * time.deltaMS
+    }
+    EventHub.on( events.changeBg, () => {
+        game.bg.index++
+        if (game.bg.index > 10) game.bg.index = 1
+        game.bg.texture = sprites['bg_' + game.bg.index]
+    })
+    game.bg.isMove = true
+    EventHub.on( events.stopBg, () => {
+        game.bg.isMove = !game.bg.isMove
+        if (game.bg.isMove) tickerAdd(game.bg)
+        else tickerRemove(game.bg)
+    })
+    tickerAdd(game.bg)
     sceneAdd(game.bg)
 
     game.mainContainer = new Container()
@@ -66,6 +83,9 @@ function screenResize(screenData) {
 function fillGameArea(ceils, inventory, gameData) {
     const levelMap =  gameData.map
 
+    // TEST BOT
+    let isTestBotOnMap = false
+
     const coordinates = [];
     let maxX = 0
     let maxY = 0
@@ -97,6 +117,24 @@ function fillGameArea(ceils, inventory, gameData) {
                         point.isBright
                     )
                 )
+
+                // TEST BOT ANGLE
+                if (isTestBotOnMap) break
+
+                isTestBotOnMap = true
+                const testBot = new Sprite(sprites.test_bot_35_deg)
+                testBot.anchor.set(0.5, 1)
+                testBot.scale.set(0.7)
+                testBot.alpha = 0
+                testBot.position.set(
+                    point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                    point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                )
+                game.mainContainer.addChild(testBot)
+                EventHub.on(events.showTestBot, () => {
+                    if (testBot.alpha === 0) testBot.alpha = 1
+                    else testBot.alpha = 0
+                })
             break
             
             case 2:

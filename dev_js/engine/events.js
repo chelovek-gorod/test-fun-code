@@ -9,6 +9,10 @@ export const events = {
     setLevel: 'setLevel',
     setCommands: 'setCommands',
     restart: 'restart',
+
+    changeBg: 'changeBg',
+    stopBg: 'stopBg',
+    showTestBot: 'showTestBot',
 }
 
 export function screenResize( data ) {
@@ -26,6 +30,16 @@ export function setLevel( data ) {
 }
 export function restart( ) {
     EventHub.emit( events.restart )
+}
+
+export function changeBg( ) {
+    EventHub.emit( events.changeBg )
+}
+export function stopBg( ) {
+    EventHub.emit( events.stopBg )
+}
+export function showTestBot( ) {
+    EventHub.emit( events.showTestBot )
 }
 
 /*

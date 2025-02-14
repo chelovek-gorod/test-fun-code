@@ -7,7 +7,18 @@ const paths = {
 }
 
 export const sprites = {
-    bg_1: 'nature_bg_2.png', /*'trash_bg_6.png',*/
+    test_bot_35_deg: 'bot_35_deg.png',
+
+    bg_1: 'nature_bg_2.png',
+    bg_2: 'water_bg_2.png',
+    bg_3: 'trash_bg_7.png',
+    bg_4: 'forest_bg_3.png',
+    bg_5: 'island_bg_2.png',
+    bg_6: 'city_bg_2.png',
+    bg_7: 'ice_bg_2.png',
+    bg_8: 'park_bg_2.png',
+    bg_9: 'place_bg_2.png',
+    bg_10: 'rw_station_bg_2.png',
     clouds: 'clouds.json',
 
     inventory_box: 'inventory_box.png',
