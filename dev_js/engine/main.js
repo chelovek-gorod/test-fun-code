@@ -152,7 +152,7 @@ document.addEventListener('keydown', (key) => {
             commands = []
             break
     }
-    console.log(key.code)
+    // console.log(key.code)
 })
 
 function commandsDone(result) {

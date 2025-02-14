@@ -19,7 +19,7 @@ const game = {}
 export function startGame(gameData) {
     const screenData = getAppScreen()
 
-    game.staticBG = new Sprite(sprites.staticBG)
+    game.staticBG = new Sprite(sprites.sbg_1)
     game.staticBG.anchor.set(0.5)
     sceneAdd(game.staticBG)
 
@@ -29,11 +29,17 @@ export function startGame(gameData) {
         game.bg.tilePosition.x -= 0.004 * time.deltaMS
         game.bg.tilePosition.y += 0.002 * time.deltaMS
     }
-    const maxBgIndex = 13
+    const maxBgIndex = 15
+    const tiledBgIndexes = 12
     EventHub.on( events.changeBg, () => {
         game.bg.index++
         if (game.bg.index > maxBgIndex) game.bg.index = 1
         game.bg.texture = sprites['bg_' + game.bg.index]
+
+        if(game.bg.index > tiledBgIndexes) {
+            console.log(game.bg.index - tiledBgIndexes)
+            game.staticBG.texture = sprites['sbg_' + (game.bg.index - tiledBgIndexes)]
+        }
     })
     game.bg.isMove = true
     EventHub.on( events.stopBg, () => {

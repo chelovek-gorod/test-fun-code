@@ -9,8 +9,9 @@ const paths = {
 export const sprites = {
     test_bot_35_deg: 'bot_35_deg.png',
 
-    staticBG: 'staticBG.png',
-
+    sbg_1: 'sbg_1.png',
+    sbg_2: 'sbg_2.png',
+    sbg_3: 'sbg_3.png',
 
     bg_1: 'nature_bg_2.png',
     bg_2: 'water_bg_2.png',
