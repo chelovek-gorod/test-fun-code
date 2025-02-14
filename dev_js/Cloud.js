@@ -1,6 +1,7 @@
 import { Sprite } from "pixi.js"
 import { CLOUDS } from "./constants"
 import { tickerAdd } from "./engine/application"
+import { EventHub, events } from "./engine/events"
 import { sprites } from "./engine/loader"
 
 export default class Cloud extends Sprite {
@@ -11,13 +12,30 @@ export default class Cloud extends Sprite {
         this.scaleRateX = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
         this.scaleRateY = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
 
-        this.speed = CLOUDS.minSpeed + Math.random() * (CLOUDS.maxSpeed - CLOUDS.minSpeed)
+        this.minSpeed = CLOUDS.minSpeed
+        this.maxSpeed = CLOUDS.maxSpeed
+        this.minTempSpeed = 0
+
+        this.speed = this.minSpeed + Math.random() * (this.maxSpeed - this.minSpeed)
         this.speedX = this.speed * CLOUDS.speedRateX
         this.speedY = this.speed * CLOUDS.speedRateY
 
         this.isReady = false
 
         tickerAdd(this)
+
+        EventHub.on( events.editCloudSpeed, (isAdd) => this.editCloudSpeed(isAdd) )
+    }
+
+    editCloudSpeed(tempClodSpeed) {
+        if (tempClodSpeed.minSpeed > 0) {
+            this.speed = tempClodSpeed.minSpeed + Math.random() * (tempClodSpeed.maxSpeed - tempClodSpeed.minSpeed)
+            this.speedX = this.speed * CLOUDS.speedRateX
+            this.speedY = this.speed * CLOUDS.speedRateY
+        } else {
+            this.speedX = 0
+            this.speedY = 0
+        }
     }
 
     setSizes(width, height, scale) {

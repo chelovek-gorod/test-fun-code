@@ -9,6 +9,9 @@ const paths = {
 export const sprites = {
     test_bot_35_deg: 'bot_35_deg.png',
 
+    staticBG: 'staticBG.png',
+
+
     bg_1: 'nature_bg_2.png',
     bg_2: 'water_bg_2.png',
     bg_3: 'trash_bg_7.png',
@@ -19,6 +22,9 @@ export const sprites = {
     bg_8: 'park_bg_2.png',
     bg_9: 'place_bg_2.png',
     bg_10: 'rw_station_bg_2.png',
+    bg_11: 'n1.png',
+    bg_12: 'n2.png',
+
     clouds: 'clouds.json',
 
     inventory_box: 'inventory_box.png',

@@ -13,6 +13,7 @@ export const events = {
     changeBg: 'changeBg',
     stopBg: 'stopBg',
     showTestBot: 'showTestBot',
+    editCloudSpeed: 'editCloudSpeed',
 }
 
 export function screenResize( data ) {
@@ -40,6 +41,9 @@ export function stopBg( ) {
 }
 export function showTestBot( ) {
     EventHub.emit( events.showTestBot )
+}
+export function editCloudSpeed( tempClodSpeed ) {
+    EventHub.emit( events.editCloudSpeed, tempClodSpeed )
 }
 
 /*

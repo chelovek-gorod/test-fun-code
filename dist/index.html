@@ -19,7 +19,7 @@
         <meta property="og:image" content="./icons/og.png" /> <!-- OG image is 1200×630 pixels  -->
         <meta property="og:description" content="Enjoy every moment" /> <!-- not important -->
         <meta property="og:locale" content="en_EN" /> <!-- default: "en_US" -->
-      <script type="module" crossorigin src="./assets/index-Dk1PPy0y.js"></script>
+      <script type="module" crossorigin src="./assets/index-BUBCjBUT.js"></script>
       <link rel="stylesheet" crossorigin href="./assets/index-f9Gfb4SE.css">
     </head>
 
@@ -67,11 +67,15 @@
                 
                 <div id="helpActionsText" style="font-size: 16px; padding: 20px 20px 0; display: none;">
                     <b>ДОСТУПНЫЕ КОМАНДЫ:</b><br>
-                    ↷ (стрелка вправо) - повернуть направо;<br>
-                    ↶ (стрелка влево) - повернуть налево;<br>
-                    ⬆ (стрелка вверх) - Шаг вперед;<br>
-                    ✪ (пробел) - выполнить действие (применяется ключ или толкается камень)<br>
-                    <b>Enter</b> - Запустить выполнение команд<br>
+                    <span id="commandRightSpan" style="cursor: pointer;">[↷]</span> (стрелка вправо) - повернуть направо;<br>
+                    <span id="commandLeftSpan" style="cursor: pointer;">[↶]</span> (стрелка влево) - повернуть налево;<br>
+                    <span id="commandForwardSpan" style="cursor: pointer;">[⬆]</span> (стрелка вверх) - Шаг вперед;<br>
+                    <span id="commandActionSpan" style="cursor: pointer;">[✪]</span> (пробел) - выполнить действие (применяется ключ или толкается камень)<br>
+                    <b><span id="commandStartSpan" style="cursor: pointer;">[Enter]</span></b> - Запустить выполнение команд<br>
+                    <br>
+                    <span id="testBotSpan" style="cursor: pointer;"><b>[t]</b></span> - показать/скрыть доп. бота в правильном ракурсе<br>
+                    <span id="bgSpeedSpan" style="cursor: pointer;"><b>[s]</b></span> - старт/стоп движение фонового изображения<br>
+                    <span id="cloudSpeedSupSpan" style="cursor: pointer;"><b>[&lt;]</b></span><span id="cloudSpeedSpan"></span><span id="cloudSpeedAddSpan" style="cursor: pointer;"><b>[&gt;]</b></span> +/- скорость облаков
                     <br>
                     <br><b>КОМАНДЫ:</b>
                 </div>
