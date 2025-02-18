@@ -28,7 +28,7 @@ export const sprites = {
 
     clouds: 'clouds.json',
 
-    inventory_box: 'inventory_box.png',
+    inventory_box: 'inventory_box2.png',
 
     bot: 'bot.json',
     bot_shadow: 'bot_shadow.png',
@@ -40,12 +40,12 @@ export const sprites = {
     ceil_2w: 'ceil_2w.png',
     ceil_3b: 'ceil_3b.png',
     ceil_3w: 'ceil_3w.png',
-    doors: 'doors.json',
-    gate_red: 'gate_red.json',
-    gate_blue: 'gate_blue.json',
-    gate_green: 'gate_green.json',
-    gate_yellow: 'gate_yellow.json',
-    keys:'keys.json',
+    doors: 'doors2.json',
+    door_blue_top: 'door_blue_top.png',
+    door_red_top: 'door_red_top.png',
+    door_green_top: 'door_green_top.png',
+    door_yellow_top: 'door_yellow_top.png',
+    keys:'keys2.json',
     gun:'gun.json',
     monster:'monster.json',
     static_stone: 'stone.png'

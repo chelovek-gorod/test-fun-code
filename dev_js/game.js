@@ -123,59 +123,46 @@ function fillGameArea(ceils, inventory, gameData) {
 
     coordinates.sort( (a, b) => a.y - b.y )
     coordinates.forEach( point => {
+        let ceil = null
+        if (point.value > 0) {
+            ceil = new Ceil(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+                point.isBright
+            )
+            ceils.addChild(ceil)
+        }
+
+        // TEST BOT ANGLE
+        if (!isTestBotOnMap) {
+            isTestBotOnMap = true
+            const testBot = new Sprite(sprites.test_bot_35_deg)
+            testBot.anchor.set(0.5, 1)
+            testBot.scale.set(0.7)
+            testBot.alpha = 0
+            testBot.position.set(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+            )
+            game.mainContainer.addChild(testBot)
+            EventHub.on(events.showTestBot, () => {
+                if (testBot.alpha === 0) testBot.alpha = 1
+                else testBot.alpha = 0
+            })
+        }
+        // end test bot 
+
         switch(point.value) {
-            case 1:
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright
-                    )
-                )
-
-                // TEST BOT ANGLE
-                if (isTestBotOnMap) break
-
-                isTestBotOnMap = true
-                const testBot = new Sprite(sprites.test_bot_35_deg)
-                testBot.anchor.set(0.5, 1)
-                testBot.scale.set(0.7)
-                testBot.alpha = 0
-                testBot.position.set(
-                    point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                    point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                )
-                game.mainContainer.addChild(testBot)
-                EventHub.on(events.showTestBot, () => {
-                    if (testBot.alpha === 0) testBot.alpha = 1
-                    else testBot.alpha = 0
-                })
-            break
-            
             case 2:
                 const bot = new Bot( ceils, gameData.botDirection, inventory )
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, bot
-                    )
-                )
+                ceil.addItem(bot, true)
             break
 
             case 3:
                 const target = new Sprite( sprites.bot_target )
                 target.anchor.set(0.5, 0.9)
                 target.type = ITEM_TYPES.target
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, target
-                    )
-                )
+                ceil.addItem(target, true)
             break
 
             case 41:
@@ -189,14 +176,7 @@ function fillGameArea(ceils, inventory, gameData) {
             case 54:
                 const doorColor = KEY_COLORS_INDEX[(point.value + '')[1]]
                 const door = new Door( doorColor, point.value > 50 )
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, door
-                    )
-                )
+                ceil.addItem(door, true)
             break
 
             case 61:
@@ -207,56 +187,23 @@ function fillGameArea(ceils, inventory, gameData) {
                 const key = new Item( {
                     type: ITEM_TYPES.key,
                     color: keyColor,
-                    textures: sprites.keys.animations[ keyColor ]
                 })
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, key
-                    )
-                )
+                ceil.addItem(key, true)
             break
 
             case 7:
-                const gun = new Item( {
-                    type: ITEM_TYPES.gun,
-                    textures: sprites.gun.animations.gun
-                })
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, gun
-                    )
-                )
+                ceil.addItem( new Item( { type: ITEM_TYPES.gun }), true )
             break
 
             case 8:
-                const stone = new Stone()
-                ceils.addChild( 
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, stone
-                    )
-                )
+                ceil.addItem(new Stone(), true)
             break
 
             case 91:
             case 92:
                 const monsterSide = +((point.value + '')[1])
                 const monster = new Monster( monsterSide )
-
-                ceils.addChild(
-                    new Ceil(
-                        point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                        point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-                        point.isBright, monster
-                    )
-                )
+                ceil.addItem(monster, true)
             break
         }
     })

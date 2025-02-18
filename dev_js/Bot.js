@@ -7,6 +7,8 @@ import { EventHub, events, restart } from './engine/events'
 export default class Bot extends Container {
     constructor(area, side, inventory) {
         super()
+        this.type = ITEM_TYPES.bot
+
         this.startSide = side
 
         this.inventory = inventory

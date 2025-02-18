@@ -10,7 +10,7 @@ export const MAP_OFFSET_TOP = MAP_OFFSET * 2 + INVENTORY_CEIL_SIZE
 export const UI_WIDTH = 300
 export const ARROW_ANIMATION_DURATION = 200
 export const BOT_SPEED = 0.1
-export const STONE_SPEED = 0.02
+export const STONE_SPEED = 0.05
 export const DIRECTION = {
     left: 'left',
     right: 'right',
@@ -21,7 +21,13 @@ export const ACTIONS = {
     left: 'left',
     right: 'right',
     forward: 'forward',
-    use: 'use'
+
+    use: 'use',
+    
+    move: 'move',
+    pick_up: 'pick_up',
+    use_key: 'use_key',
+    use_gun: 'use',
 }
 export const CEIL_OFFSET = {
     [DIRECTION.left]: { dx: -CEIL_HALF_SIZE, dy: -CEIL_QUARTER_SIZE },
@@ -30,6 +36,7 @@ export const CEIL_OFFSET = {
     [DIRECTION.down]: { dx: -CEIL_HALF_SIZE, dy: CEIL_QUARTER_SIZE },
 }
 export const ITEM_TYPES = {
+    bot: 'bot',
     door: 'door',
     key: 'key',
     target: 'target',

@@ -7,8 +7,9 @@ export default class Door extends AnimatedSprite {
     constructor(color, isLefRight) {
         //super(sprites.doors.animations[color + "_close"])
         //this.anchor.set(0.5, 0.8)
-        super(sprites['gate_' + color].animations['gate_' + color + '_open'])
-        this.anchor.set(0.5, 1)
+        //super(sprites['gate_' + color].animations['gate_' + color + '_open'])
+        super(sprites.doors.animations[color])
+        this.anchor.set(0.52, 0.82)
         if (isLefRight) this.scale.set( -1 , 1 )
         this.color = color
 

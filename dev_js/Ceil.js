@@ -4,20 +4,18 @@ import { ITEM_TYPES }  from "./constants"
 import { EventHub, events } from './engine/events'
 
 export default class Ceil extends Container {
-    constructor(x, y, isBright, item = null) {
+    constructor(x, y, isBright) {
         super()
         const ceilName = 'ceil_' + Math.ceil(Math.random() * 3) + (isBright ? 'w' : 'b')
         this.ceil = new Sprite( sprites[ ceilName ] )
         this.ceil.anchor.set(0.5)
         this.addChild(this.ceil)
 
-        this.isOpen = (item === null || item.type === ITEM_TYPES.target) ? true : false
-        this.item = item
+        this.isOpen = true
+        this.item = null
 
-        this.restartIsOpen = this.isOpen
-        this.restartItem = item
-
-        if (this.item) this.addChild(this.item)
+        this.restartIsOpen = true
+        this.restartItem = null
 
         this.position.set(x, y)
 
@@ -33,6 +31,22 @@ export default class Ceil extends Container {
         if (this.item) {
             this.addChild( this.item )
             this.item.position.set(0, 0)
+        }
+    }
+
+    addItem(item, isStartOption = false) {
+        if (item === null || item.type === ITEM_TYPES.target || item.type === ITEM_TYPES.bot) {
+            this.isOpen = true
+        } else {
+            this.isOpen = false
+        }
+        
+        this.item = item
+        this.addChild(this.item)
+
+        if (isStartOption) {
+            this.restartIsOpen = this.isOpen
+            this.restartItem = item
         }
     }
 

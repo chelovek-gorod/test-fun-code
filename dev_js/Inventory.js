@@ -36,7 +36,7 @@ export default class Inventory extends Container {
                         const key = new Item( {
                             type: ITEM_TYPES.key,
                             color: color,
-                            textures: sprites.keys.animations[ color ]
+                            textures: sprites.keys.animations[color]
                         }, true)
                         key.position.set(
                             this.slotsPoints[this.slots.length].x, this.slotsPoints[this.slots.length].y
