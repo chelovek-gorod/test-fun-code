@@ -30,6 +30,9 @@ export const sprites = {
 
     inventory_box: 'inventory_box2.png',
 
+    bb1: 'bb1.png',
+    bb2: 'bb2.png',
+
     bot: 'bot.json',
     bot_shadow: 'bot_shadow.png',
     bot_target: 'bot_target.png',

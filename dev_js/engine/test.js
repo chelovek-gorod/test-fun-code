@@ -68,85 +68,50 @@ const mapTableUnicode = {
 const mapColorIndex = { 1 : 'red', 2 : 'yellow', 3 : 'green', 4 : 'blue' }
 const mapSideIndex = { 1 : 'right', 2 : 'down', 3 : 'left', 4 : 'up' }
 
-const testContainerDiv = document.getElementById('test-container')
-testContainerDiv.innerHTML += `
-<style>
-    #test-container {padding: 20px; font-size: 18px;}
-    #test-container h2 {text-align: center; font-size: 24px;}
-    #test-container td, #test-container button {cursor: pointer;}
-    #levelSizeControlDiv {text-align: center; padding: 20px;}
-    #levelSizeControlDiv span {padding: 20px;}
-    #test-container table {margin: 0 auto;}
-    #test-container table td {border: 2px solid black; border-radius: 6px; width: 24px; height: 24px; text-align: center;}
-</style>
-`
-testContainerDiv.innerHTML += '<h2>Стартовый инвентарь</h2>'
-
-const inventoryTable = document.createElement('table')
-inventoryTable.id = 'inventoryTable'
-testContainerDiv.append(inventoryTable)
-
-const inventoryRow = document.createElement('tr')
-inventoryTable.append(inventoryRow)
-
-fillInventoryTable(startMap.inventory)
-function fillInventoryTable(inventory) {
-    for(let i = 0; i < 5; i++) {
-        const invCeil = document.createElement('td')
-        invCeil.addEventListener('click', getInventoryCeilClick)
-        if (inventory[i]) {
-            invCeil.style.backgroundColor = inventoryTableUnicode[ inventory[i] ].color
-            invCeil.innerText = inventoryTableUnicode[ inventory[i] ].icon
-        } else {
-            invCeil.style.backgroundColor = inventoryTableUnicode.empty.color
-            invCeil.innerText = inventoryTableUnicode.empty.icon
-        }
-        inventoryRow.append(invCeil)
-    }
-}
-
-function getInventoryCeilClick(event) {
-    console.log(event.target)
-    event.target.innerText = 12
-}
-
-testContainerDiv.innerHTML += '<h2>Настройка уровня</h2>'
-
-const levelSizeControlDiv = document.createElement('div')
-levelSizeControlDiv.id = 'levelSizeControlDiv'
-testContainerDiv.append(levelSizeControlDiv)
-const levelSizeSupButton = document.createElement('button')
-levelSizeSupButton.innerHTML = "-"
-levelSizeSupButton.onclick = () => resizeTable(false)
-levelSizeControlDiv.append(levelSizeSupButton)
-const levelSizeValueSpan = document.createElement('span')
-levelSizeControlDiv.append(levelSizeValueSpan)
-const levelSizeAddButton = document.createElement('button')
-levelSizeAddButton.innerHTML = "+"
-levelSizeAddButton.onclick = () => resizeTable(true)
-levelSizeControlDiv.append(levelSizeAddButton)
-
-const levelTable = document.createElement('table')
-levelTable.id = 'levelTable'
-testContainerDiv.append(levelTable)
-
 let tableSize = startMap.map.length > startMap.map[0].length ? startMap.map.length : startMap.map[0].length
-levelSizeValueSpan.innerText = tableSize
 
-function resizeTable(isAdd) {
-    tableSize += isAdd ? 1 : -1
-    if (tableSize < 1) tableSize = 1
-    if (tableSize > 13) tableSize = 13
-    levelSizeValueSpan.innerText = tableSize
-}
+document.body.onload = () => {
+    // INVENTORY
+    const inventoryLine = document.getElementById('inventory-line')
+    for(let i = 0; i < 5; i++) {
+        const inventoryCeil = document.createElement('td')
+        inventoryCeil.onclick = () => console.log('+')
+        inventoryCeil.className = 'inventory-ceil'
+        if (startMap.inventory[i]) {
+            inventoryCeil.style.backgroundColor = inventoryTableUnicode[ startMap.inventory[i] ].color
+            inventoryCeil.innerText = inventoryTableUnicode[ startMap.inventory[i] ].icon
+        } else {
+            inventoryCeil.style.backgroundColor = inventoryTableUnicode.empty.color
+            inventoryCeil.innerText = inventoryTableUnicode.empty.icon
+        }
+        inventoryLine.append(inventoryCeil)
+    }
+    
+    // MAP SIZE
+    const valueMapSizeSpan = document.getElementById('valueMapSize')
+    valueMapSizeSpan.innerText = tableSize
 
-createEmptyTable(tableSize)
-function createEmptyTable(size) {
-    for(let y = 0; y < size; y++) {
+    const supMapSizeButton = document.getElementById('supMapSize')
+    supMapSizeButton.onclick = () => resizeTable(false)
+
+    const addMapSizeButton = document.getElementById('addMapSize')
+    addMapSizeButton.onclick = () => resizeTable(true)
+
+    function resizeTable(isAdd) {
+        tableSize += isAdd ? 1 : -1
+        if (tableSize < 1) tableSize = 1
+        if (tableSize > 13) tableSize = 13
+        valueMapSizeSpan.innerText = tableSize
+    }
+
+    // MAP TABLE
+    const mapTable = document.getElementById('map-table')
+
+    for(let y = 0; y < tableSize; y++) {
         const row = document.createElement('tr')
         row.dataset.y = y
-        levelTable.append(row)
-        for(let x = 0; x < size; x++) {
+        mapTable.append(row)
+        for(let x = 0; x < tableSize; x++) {
             const ceil = document.createElement('td')
             ceil.dataset.x = x
             ceil.addEventListener('click', getCeilClick)
@@ -190,15 +155,14 @@ function createEmptyTable(size) {
             row.append(ceil)
         }
     }
+
+
+    function getCeilClick(event) {
+        const ceil = event.target
+        ceil.innerText = '+'
+        console.log( ceil)
+    }
 }
-
-function getCeilClick(event) {
-    const ceil = event.target
-    ceil.innerText = '+'
-}
-
-
-
 
 /*
 

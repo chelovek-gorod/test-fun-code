@@ -101,6 +101,13 @@ function fillGameArea(ceils, inventory, gameData) {
     // TEST BOT
     let isTestBotOnMap = false
 
+    function changeTestBotImage(testBot) {
+        testBot.spriteIndex++
+        if (testBot.spriteIndex > 2) testBot.spriteIndex = 1
+        testBot.texture = sprites[`bb${testBot.spriteIndex}`]
+        setTimeout( changeTestBotImage, Math.ceil( Math.random() * 500 ) + 500, testBot )
+    }
+
     const coordinates = [];
     let maxX = 0
     let maxY = 0
@@ -122,7 +129,7 @@ function fillGameArea(ceils, inventory, gameData) {
     }
 
     coordinates.sort( (a, b) => a.y - b.y )
-    coordinates.forEach( point => {
+    coordinates.forEach( (point, i) => {
         let ceil = null
         if (point.value > 0) {
             ceil = new Ceil(
@@ -134,12 +141,14 @@ function fillGameArea(ceils, inventory, gameData) {
         }
 
         // TEST BOT ANGLE
-        if (!isTestBotOnMap) {
+        if (i === 59 && !isTestBotOnMap) {
             isTestBotOnMap = true
-            const testBot = new Sprite(sprites.test_bot_35_deg)
-            testBot.anchor.set(0.5, 1)
+            const testBot = new Sprite(sprites.bb1)
+            testBot.spriteIndex = 1
+            changeTestBotImage(testBot)
+            testBot.anchor.set(0.5, 0.9)
             testBot.scale.set(0.7)
-            testBot.alpha = 0
+            testBot.alpha = 1
             testBot.position.set(
                 point.x * CEIL_HALF_SIZE + MAP_OFFSET,
                 point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
@@ -153,7 +162,7 @@ function fillGameArea(ceils, inventory, gameData) {
         // end test bot 
 
         switch(point.value) {
-            case 2:
+            case 2: 
                 const bot = new Bot( ceils, gameData.botDirection, inventory )
                 ceil.addItem(bot, true)
             break
