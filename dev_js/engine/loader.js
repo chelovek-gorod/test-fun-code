@@ -13,8 +13,8 @@ export const sprites = {
     sbg_2: 'sbg_2.png',
     sbg_3: 'sbg_3.png',
 
-    bg_1: 'nature_bg_2.png',
-    bg_2: 'water_bg_2.png',
+    bg_1: 'continent_bg_2.png',
+    bg_2: 'desert_bg_2.png',
     bg_3: 'trash_bg_7.png',
     bg_4: 'forest_bg_3.png',
     bg_5: 'island_bg_2.png',
@@ -25,6 +25,8 @@ export const sprites = {
     bg_10: 'rw_station_bg_2.png',
     bg_11: 'n1.png',
     bg_12: 'n2.png',
+    bg_13: 'nature_bg_2.png',
+    bg_14: 'water_bg_2.png',
 
     clouds: 'clouds.json',
 
@@ -48,6 +50,10 @@ export const sprites = {
     door_red_top: 'door_red_top.png',
     door_green_top: 'door_green_top.png',
     door_yellow_top: 'door_yellow_top.png',
+    door_red: 'door_v_red.json',
+    door_green: 'door_v_green.json',
+    door_blue: 'door_v_blue.json',
+    door_yellow: 'door_v_yellow.json',
     keys:'keys2.json',
     gun:'gun.json',
     monster:'monster.json',

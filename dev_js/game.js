@@ -29,8 +29,10 @@ export function startGame(gameData) {
         game.bg.tilePosition.x -= 0.004 * time.deltaMS
         game.bg.tilePosition.y += 0.002 * time.deltaMS
     }
-    const maxBgIndex = 15
-    const tiledBgIndexes = 12
+    
+    const staticBgIndexes = 3
+    const tiledBgIndexes = 14
+    const maxBgIndex = tiledBgIndexes + staticBgIndexes
     EventHub.on( events.changeBg, () => {
         game.bg.index++
         if (game.bg.index > maxBgIndex) game.bg.index = 1
@@ -141,7 +143,7 @@ function fillGameArea(ceils, inventory, gameData) {
         }
 
         // TEST BOT ANGLE
-        if (i === 59 && !isTestBotOnMap) {
+        if (i === 36 && !isTestBotOnMap) {
             isTestBotOnMap = true
             const testBot = new Sprite(sprites.bb1)
             testBot.spriteIndex = 1
