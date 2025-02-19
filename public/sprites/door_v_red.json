@@ -355,12 +355,12 @@
 "animations": {
 	"lock_left": [
         "lock_0","lock_1","lock_2","lock_3","lock_4","lock_5","lock_6",
-        "lock_0","lock_1","lock_12","lock_123","lock_1234","lock_12345","lock_123456",
+        "lock_1","lock_12","lock_123","lock_1234","lock_12345","lock_123456",
         "lock_23456","lock_3456","lock_456","lock_56","lock_6"
     ],
     "lock_right": [
-        "lock_0","lock_6","lock_5","lock_4","lock_3","lock_2","lock_1",
-        "lock_0","lock_1","lock_16","lock_165","lock_1654","lock_16543","lock_123456",
+        "lock_0","lock_1","lock_6","lock_5","lock_4","lock_3","lock_2",
+        "lock_1","lock_16","lock_165","lock_1654","lock_16543","lock_123456",
         "lock_23456","lock_5432","lock_432","lock_32","lock_2"
     ],
     "open": [
