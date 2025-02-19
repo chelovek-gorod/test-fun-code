@@ -31,7 +31,7 @@ export function startGame(gameData) {
     }
     
     const staticBgIndexes = 3
-    const tiledBgIndexes = 14
+    const tiledBgIndexes = 15
     const maxBgIndex = tiledBgIndexes + staticBgIndexes
     EventHub.on( events.changeBg, () => {
         game.bg.index++
