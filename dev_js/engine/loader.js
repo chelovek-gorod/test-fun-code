@@ -8,6 +8,7 @@ const paths = {
 
 export const sprites = {
     test_bot_35_deg: 'bot_35_deg.png',
+    bot_idle: 'bot_idle.json',
 
     sbg_1: 'sbg_1.png',
     sbg_2: 'sbg_2.png',

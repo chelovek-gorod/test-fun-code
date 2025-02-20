@@ -102,13 +102,14 @@ function fillGameArea(ceils, inventory, gameData) {
 
     // TEST BOT
     let isTestBotOnMap = false
-
+    /*
     function changeTestBotImage(testBot) {
         testBot.spriteIndex++
         if (testBot.spriteIndex > 2) testBot.spriteIndex = 1
         testBot.texture = sprites[`bb${testBot.spriteIndex}`]
         setTimeout( changeTestBotImage, Math.ceil( Math.random() * 500 ) + 500, testBot )
     }
+    */
 
     const coordinates = [];
     let maxX = 0
@@ -145,6 +146,7 @@ function fillGameArea(ceils, inventory, gameData) {
         // TEST BOT ANGLE
         if (i === 36 && !isTestBotOnMap) {
             isTestBotOnMap = true
+            /*
             const testBot = new Sprite(sprites.bb1)
             testBot.spriteIndex = 1
             changeTestBotImage(testBot)
@@ -155,6 +157,20 @@ function fillGameArea(ceils, inventory, gameData) {
                 point.x * CEIL_HALF_SIZE + MAP_OFFSET,
                 point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
             )
+            */
+
+            console.log(sprites.bot_idle)
+            const testBot = new AnimatedSprite(sprites.bot_idle.animations.idle)
+            testBot.animationSpeed = 0.5
+            testBot.anchor.set(0.5, 0.9)
+            testBot.scale.set(0.7)
+            testBot.alpha = 1
+            testBot.position.set(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+            )
+            testBot.play()
+
             game.mainContainer.addChild(testBot)
             EventHub.on(events.showTestBot, () => {
                 if (testBot.alpha === 0) testBot.alpha = 1
