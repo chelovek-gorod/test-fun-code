@@ -58,7 +58,7 @@ export default class Cloud extends Sprite {
         this.position.x += this.speedX * time.deltaMS
         this.position.y += this.speedY * time.deltaMS
 
-        if (this.position.x > this.maxX || this.position.Y < this.minY) {
+        if (this.position.x > this.maxX || this.position.y < this.minY) {
             if (Math.random() < 0.5) {
                 this.position.x = this.minX
                 this.position.y = this.minY + Math.random() * this.maxY

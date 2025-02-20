@@ -13,7 +13,7 @@ canvas.remove()
 
 const app = new Application()
 const appSettings = {
-    background: 0x000000,
+    background: 0xffffff,
     antialias: true, // сглаживание
     resolution: 2,
     resizeTo: appContainer

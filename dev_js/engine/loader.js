@@ -7,8 +7,13 @@ const paths = {
 }
 
 export const sprites = {
+    flag_stem: 'flag_stem.png',
+    flag_logo: 'flag_logo.png',
+    dpf_flag: 'dpf_flag.png', //'dp_filter_tile_416x416px.png', // 'dpf_flag.png',
+
     test_bot_35_deg: 'bot_35_deg.png',
     bot_idle: 'bot_idle.json',
+    space_ship: 'space_ship.png',
 
     sbg_1: 'sbg_1.png',
     sbg_2: 'sbg_2.png',
@@ -30,7 +35,10 @@ export const sprites = {
     bg_14: 'nature_bg_2.png',
     bg_15: 'water_bg_2.png',
 
+    bird: 'bird.json',
+
     clouds: 'clouds.json',
+    dpf_clouds: 'dp_filter_tile_416x416px.png',
 
     inventory_box: 'inventory_box2.png',
 
@@ -59,7 +67,9 @@ export const sprites = {
     keys:'keys2.json',
     gun:'gun.json',
     monster:'monster.json',
-    static_stone: 'stone.png'
+    static_stone: 'stone.png',
+
+    flower: 'flower.json',
 }
 const spritesNumber = Object.keys(sprites).length
 for (let sprite in sprites) sprites[sprite] = paths.sprites + sprites[sprite]

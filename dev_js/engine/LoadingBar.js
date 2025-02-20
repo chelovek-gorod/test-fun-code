@@ -20,25 +20,25 @@ class LoadingBar extends Container {
         this.text = new Text({
             text:'Загрузка: 0%',
             style:textStyles.loading
-          })
+        })
         this.text.anchor.set(0.5, 1)
         this.text.position.y = 10
         this.addChild(this.text)
 
         this.screenResize( getAppScreen() )
-        //EventHub.on( events.screenResize, this.screenResize.bind(this) )
+        EventHub.on( events.screenResize, this.screenResize, this )
 
         sceneAdd(this)
     }
 
     delete() {
+        EventHub.off( events.screenResize, this.screenResize, this )
         this.removeAllListeners()
         sceneRemove(this)
         this.destroy()
     }
 
     screenResize(screenData) {
-       // if (this.destroyed) return
         this.position.x = screenData.centerX
         this.position.y = screenData.centerY
     }

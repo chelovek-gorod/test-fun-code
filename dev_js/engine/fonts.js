@@ -11,10 +11,10 @@ export function initFontStyles() {
         loading: new TextStyle({
             fontFamily: fonts.normal,
             fontSize: 20,
-            fill: '#00ff00',
+            fill: '#000000',
         
             dropShadow: true,
-            dropShadowColor: '#777777',
+            dropShadowColor: '#00ff00',
             dropShadowBlur: 4,
             dropShadowAngle: 0,
             dropShadowDistance: 0,

@@ -10,9 +10,12 @@ import Ceil from "./Ceil"
 import Inventory from "./Inventory"
 import Door from "./Door"
 import Cloud from "./Cloud"
+import Bird from "./Bird"
 import Stone from "./Stone"
 import Monster from "./Monster"
 import Item from "./Item"
+import Flag from "./Flag"
+import Flower from "./Flower"
 
 const game = {}
 
@@ -62,6 +65,11 @@ export function startGame(gameData) {
         game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
     }
 
+    game.birdContainer = new Container()
+    for(let b = 0; b < 3; b++) {
+        game.birdContainer.addChild( new Bird() )
+    }
+
     game.inventory = new Inventory(gameData.inventory)
     game.mainContainer.addChild(game.inventory)
 
@@ -73,6 +81,7 @@ export function startGame(gameData) {
 
     sceneAdd( game.cloudContainer )
     sceneAdd( game.mainContainer )
+    sceneAdd( game.birdContainer )
 }
 
 function screenResize(screenData) { 
@@ -94,22 +103,12 @@ function screenResize(screenData) {
     game.inventory.position.x = game.sizes.width * 0.5
     game.inventory.position.y = MAP_OFFSET * 0.5
 
-    game.cloudContainer.children.forEach( cloud => cloud.setSizes(screenData.width, screenData.height, scale))
+    game.cloudContainer.children.forEach( cloud => cloud.setSizes(screenData.width, screenData.height, scale) )
+    game.birdContainer.children.forEach( bird => bird.setSizes(screenData.width, screenData.height, scale) )
 }
 
 function fillGameArea(ceils, inventory, gameData) {
     const levelMap =  gameData.map
-
-    // TEST BOT
-    let isTestBotOnMap = false
-    /*
-    function changeTestBotImage(testBot) {
-        testBot.spriteIndex++
-        if (testBot.spriteIndex > 2) testBot.spriteIndex = 1
-        testBot.texture = sprites[`bb${testBot.spriteIndex}`]
-        setTimeout( changeTestBotImage, Math.ceil( Math.random() * 500 ) + 500, testBot )
-    }
-    */
 
     const coordinates = [];
     let maxX = 0
@@ -144,22 +143,7 @@ function fillGameArea(ceils, inventory, gameData) {
         }
 
         // TEST BOT ANGLE
-        if (i === 36 && !isTestBotOnMap) {
-            isTestBotOnMap = true
-            /*
-            const testBot = new Sprite(sprites.bb1)
-            testBot.spriteIndex = 1
-            changeTestBotImage(testBot)
-            testBot.anchor.set(0.5, 0.9)
-            testBot.scale.set(0.7)
-            testBot.alpha = 1
-            testBot.position.set(
-                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-            )
-            */
-
-            console.log(sprites.bot_idle)
+        if (i === 43) {
             const testBot = new AnimatedSprite(sprites.bot_idle.animations.idle)
             testBot.animationSpeed = 0.5
             testBot.anchor.set(0.5, 0.9)
@@ -177,7 +161,41 @@ function fillGameArea(ceils, inventory, gameData) {
                 else testBot.alpha = 0
             })
         }
-        // end test bot 
+        // end test bot
+
+        // TEST FLAG
+        if (i === 35) {
+            const testFlag = new Flag()
+            testFlag.position.set(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+            )
+            game.mainContainer.addChild(testFlag)
+        }
+        // end test flag 
+
+        // space ship
+        if (i === 28) {
+            const spaceShip = new Sprite(sprites.space_ship)
+            spaceShip.anchor.set(0.5, 0.8)
+            spaceShip.position.set(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+            )
+            game.mainContainer.addChild(spaceShip)
+        }
+        // end test flag 
+
+        // test flower
+        if (i === 36) {
+            const flower = new Flower()
+            flower.position.set(
+                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
+                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
+            )
+            game.mainContainer.addChild(flower)
+        }
+        // end test flower
 
         switch(point.value) {
             case 2: 
