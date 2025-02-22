@@ -53,7 +53,7 @@ export default class Inventory extends Container {
                     type: ITEM_TYPES.gun,
                     textures: sprites.gun.animations.gun
                 }, true)
-                key.position.set(
+                gun.position.set(
                     this.slotsPoints[this.slots.length].x, this.slotsPoints[this.slots.length].y
                 )
                 this.addChild( gun )
