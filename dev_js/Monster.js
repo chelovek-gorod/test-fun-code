@@ -7,7 +7,7 @@ import { ITEM_TYPES } from "./constants"
 export default class Monster extends AnimatedSprite {
     constructor(side) {
         super(sprites.monster.animations.monster)
-        if (side === 2) this.scale.set(-1, 1)
+        if (side < 3) this.scale.set(-1, 1)
         this.anchor.set(0.5, 0.9)
         this.animationSpeed = 0.5
         this.play()

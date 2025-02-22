@@ -12,7 +12,7 @@ export const sprites = {
     dpf_flag: 'dpf_flag.png', //'dp_filter_tile_416x416px.png', // 'dpf_flag.png',
 
     test_bot_35_deg: 'bot_35_deg.png',
-    bot_idle: 'bot_idle.json',
+    bot_idle: 'bot_idle2.json',
     space_ship: 'space_ship.png',
 
     sbg_1: 'sbg_1.png',

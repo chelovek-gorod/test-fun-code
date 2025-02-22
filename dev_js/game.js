@@ -143,11 +143,11 @@ function fillGameArea(ceils, inventory, gameData) {
         }
 
         // TEST BOT ANGLE
-        if (i === 43) {
+        if (i === 46) {
             const testBot = new AnimatedSprite(sprites.bot_idle.animations.idle)
-            testBot.animationSpeed = 0.5
-            testBot.anchor.set(0.5, 0.9)
-            testBot.scale.set(0.7)
+            testBot.animationSpeed = 0.35
+            testBot.anchor.set(0.5, 0.95)
+            testBot.scale.set(0.9)
             testBot.alpha = 1
             testBot.position.set(
                 point.x * CEIL_HALF_SIZE + MAP_OFFSET,
@@ -163,31 +163,8 @@ function fillGameArea(ceils, inventory, gameData) {
         }
         // end test bot
 
-        // TEST FLAG
-        if (i === 35) {
-            const testFlag = new Flag()
-            testFlag.position.set(
-                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-            )
-            game.mainContainer.addChild(testFlag)
-        }
-        // end test flag 
-
-        // space ship
-        if (i === 28) {
-            const spaceShip = new Sprite(sprites.space_ship)
-            spaceShip.anchor.set(0.5, 0.8)
-            spaceShip.position.set(
-                point.x * CEIL_HALF_SIZE + MAP_OFFSET,
-                point.y * CEIL_QUARTER_SIZE + MAP_OFFSET_TOP,
-            )
-            game.mainContainer.addChild(spaceShip)
-        }
-        // end test flag 
-
         // test flower
-        if (i === 36) {
+        if (i === 45) {
             const flower = new Flower()
             flower.position.set(
                 point.x * CEIL_HALF_SIZE + MAP_OFFSET,
@@ -204,8 +181,7 @@ function fillGameArea(ceils, inventory, gameData) {
             break
 
             case 3:
-                const target = new Sprite( sprites.bot_target )
-                target.anchor.set(0.5, 0.9)
+                const target = new Flag()
                 target.type = ITEM_TYPES.target
                 ceil.addItem(target, true)
             break
@@ -246,6 +222,8 @@ function fillGameArea(ceils, inventory, gameData) {
 
             case 91:
             case 92:
+            case 93:
+            case 94:
                 const monsterSide = +((point.value + '')[1])
                 const monster = new Monster( monsterSide )
                 ceil.addItem(monster, true)

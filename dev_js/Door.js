@@ -11,7 +11,7 @@ export default class Door extends AnimatedSprite {
         super(sprites['door_' + color].animations[(isLefRight) ? 'lock_left' : 'lock_right'])
         this.isLefRight = isLefRight
         this.anchor.set(0.52, 0.82)
-        if (!isLefRight) this.scale.set( -1 , 1 )
+        if (isLefRight) this.scale.set( -1 , 1 )
         this.color = color
 
         this.type = ITEM_TYPES.door

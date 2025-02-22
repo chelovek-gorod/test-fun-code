@@ -7,7 +7,7 @@ export default class Flag extends Container {
     constructor() {
         super()
         this.stem = new Sprite(sprites.flag_stem)
-        this.stem.anchor.set(0.5, 0.9)
+        this.stem.anchor.set(0.5, 0.95)
         this.addChild(this.stem)
 
         this.flag = new Sprite(sprites.flag_logo)
