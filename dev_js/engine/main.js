@@ -90,6 +90,8 @@ document.body.onload = () => {
     const configContainer = document.getElementById('config-container')
     const controlContainer = document.getElementById('control-container')
     controlContainer.style.display = 'none'
+    const gameSettingsContainer = document.getElementById('game-settings-container')
+    gameSettingsContainer.style.display = 'none'
 
     const inventoryLine = document.getElementById('inventory-line')
     const mapTable = document.getElementById('map-table')
@@ -97,6 +99,7 @@ document.body.onload = () => {
     applyButton.onclick = () => {
         configContainer.style.display = 'none'
         controlContainer.style.display = 'block'
+        gameSettingsContainer.style.display = 'block'
 
         // проверка лишних запятых в JSON при ручном заполнении
         // const startMap = JSON.parse(testDataText.value.replace(/,\s*]/g, ']').replace(/,\s*},/g, '},'))
