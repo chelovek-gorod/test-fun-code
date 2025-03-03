@@ -6,11 +6,13 @@ import { sprites } from "./engine/loader"
 
 export default class Cloud extends Sprite {
     constructor(textureIndex) {
-        super(sprites.clouds.textures["cloud_" + textureIndex])
+        super(sprites.clouds2.textures["cloud_" + textureIndex])
         this.anchor.set(0.5)
 
-        this.scaleRateX = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
-        this.scaleRateY = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
+        //this.scaleRateX = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
+        //this.scaleRateY = Math.random() < 0.5 ? -CLOUDS.scale : CLOUDS.scale
+        this.scaleRateX = 1
+        this.scaleRateY = 1
 
         this.minSpeed = CLOUDS.minSpeed
         this.maxSpeed = CLOUDS.maxSpeed

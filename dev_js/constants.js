@@ -59,7 +59,7 @@ export const KEY_COLORS_INDEX = {
 
 export const CLOUDS = {
     scale: 0.75,
-    count: 75,
+    count: 50,
     minSpeed: 0.05,
     maxSpeed: 0.1,
     speedRateX: 0.6,

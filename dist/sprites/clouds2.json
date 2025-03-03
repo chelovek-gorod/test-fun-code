@@ -1,0 +1,181 @@
+{
+  "frames": {
+    "cloud_3": {
+      "frame": {
+        "x": 1,
+        "y": 1,
+        "w": 224,
+        "h": 217
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 224,
+        "h": 217
+      },
+      "sourceSize": {
+        "w": 224,
+        "h": 217
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_5": {
+      "frame": {
+        "x": 227,
+        "y": 1,
+        "w": 222,
+        "h": 184
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 222,
+        "h": 184
+      },
+      "sourceSize": {
+        "w": 222,
+        "h": 184
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_1": {
+      "frame": {
+        "x": 451,
+        "y": 1,
+        "w": 176,
+        "h": 121
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 176,
+        "h": 121
+      },
+      "sourceSize": {
+        "w": 176,
+        "h": 121
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_2": {
+      "frame": {
+        "x": 629,
+        "y": 1,
+        "w": 140,
+        "h": 95
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 140,
+        "h": 95
+      },
+      "sourceSize": {
+        "w": 140,
+        "h": 95
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_4": {
+      "frame": {
+        "x": 771,
+        "y": 1,
+        "w": 139,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 139,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 139,
+        "h": 104
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_6": {
+      "frame": {
+        "x": 629,
+        "y": 98,
+        "w": 89,
+        "h": 67
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 89,
+        "h": 67
+      },
+      "sourceSize": {
+        "w": 89,
+        "h": 67
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "cloud_7": {
+      "frame": {
+        "x": 451,
+        "y": 124,
+        "w": 86,
+        "h": 85
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 86,
+        "h": 85
+      },
+      "sourceSize": {
+        "w": 86,
+        "h": 85
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "meta": {
+    "image": "clouds2.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 911,
+      "h": 219
+    },
+    "scale": 1
+  }
+}

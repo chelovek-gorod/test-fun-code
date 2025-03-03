@@ -33,7 +33,7 @@ export function startGame(gameData) {
     }
     
     const staticBgIndexes = 0
-    const tiledBgIndexes = 8
+    const tiledBgIndexes = 7
     const maxBgIndex = tiledBgIndexes + staticBgIndexes
     EventHub.on( events.changeBg, () => {
         game.bg.index++
@@ -61,7 +61,7 @@ export function startGame(gameData) {
 
     game.cloudContainer = new Container()
     for(let i = 0; i < CLOUDS.count; i++) {
-        game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
+        game.cloudContainer.addChild( new Cloud( (i % 7) + 1 ) )
     }
 
     game.inventory = new Inventory(gameData.inventory)
