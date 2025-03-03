@@ -62,7 +62,7 @@ const MAP_DATA = {
     62 : {name: 'key_yellow', char: '⚿', color: 'yellow'},
     63 : {name: 'key_green', char: '⚿', color: 'green'},
     64 : {name: 'key_blue', char: '⚿', color: 'blue'},
-    7 :  {name: 'gun', char: '🗲', color: '#ff9800'},
+    7 :  {name: 'gun', char: '➶', color: '#ff9800'},
     8 :  {name: 'stone', char: '⬤', color: '#777777'},
     91 : {name: 'monster_up', char: '🢕', color: '#b9006c'},
     92 : {name: 'monster_right', char: '🢖', color: '#b9006c'},

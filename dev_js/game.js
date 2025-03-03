@@ -33,7 +33,7 @@ export function startGame(gameData) {
     }
     
     const staticBgIndexes = 0
-    const tiledBgIndexes = 8
+    const tiledBgIndexes = 7
     const maxBgIndex = tiledBgIndexes + staticBgIndexes
     EventHub.on( events.changeBg, () => {
         game.bg.index++

@@ -13,16 +13,13 @@ export const sprites = {
 
     bot_idle: 'bot_idle2.json',
 
-    //sbg_1: 'new_bg_1.png',
+    sbg_1: 'static_bg_1.png',
 
-    bg_1: 'new_bg_tile_1.png',
-    bg_2: 'new_bg_tile_2.png',
-    bg_3: 'new_bg_tile_3.png',
-    bg_4: 'new_bg_tile_4.png',
-    bg_5: 'new_bg_tile_5.png',
-    bg_6: 'new_bg_tile_6.png',
-    bg_7: 'new_bg_tile_7.png',
-    bg_8: 'new_bg_tile_8.png',
+    bg_1: 'tile_bg_1.png',
+    bg_2: 'tile_bg_2.png',
+    bg_3: 'tile_bg_3.png',
+    bg_4: 'tile_bg_4.png',
+    bg_5: 'tile_bg_5.png',
 
     bird: 'bird.json',
 
