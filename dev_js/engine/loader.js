@@ -13,7 +13,7 @@ export const sprites = {
 
     bot_idle: 'bot_idle2.json',
 
-    //sbg_1: 'sbg_1.png',
+    //sbg_1: 'new_bg_1.png',
 
     bg_1: 'new_bg_tile_1.png',
     bg_2: 'new_bg_tile_2.png',
@@ -22,13 +22,14 @@ export const sprites = {
     bg_5: 'new_bg_tile_5.png',
     bg_6: 'new_bg_tile_6.png',
     bg_7: 'new_bg_tile_7.png',
+    bg_8: 'new_bg_tile_8.png',
 
     bird: 'bird.json',
 
     clouds: 'clouds.json',
     clouds2: 'clouds2.json',
 
-    inventory_box: 'inventory_box2.png',
+    inventory_box: 'inventory_box.png',
     light: 'light.json',
 
     bot: 'bot.json',

@@ -11,6 +11,8 @@ export default class Ceil extends Container {
         this.ceil.anchor.set(0.5)
         this.addChild(this.ceil)
 
+        this.isBright = isBright
+
         this.isOpen = true
         this.item = null
 
@@ -51,6 +53,8 @@ export default class Ceil extends Container {
         if (isStartOption) {
             this.restartIsOpen = this.isOpen
             this.restartItem = item
+
+            this.ceil.texture = sprites[ 'ceil_1' + (this.isBright ? 'w' : 'b') ]           
         }
     }
 
