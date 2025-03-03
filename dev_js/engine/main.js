@@ -377,7 +377,8 @@ function activateControl() {
     document.getElementById('action-go').onclick = (e) => addActionToStack(ACTIONS.forward, e.target.innerText)
     document.getElementById('action-left').onclick = (e) => addActionToStack(ACTIONS.left, e.target.innerText)
     document.getElementById('action-right').onclick = (e) => addActionToStack(ACTIONS.right, e.target.innerText)
-    //document.getElementById('action-use-key').onclick = (e) => addActionToStack(ACTIONS.use_key, e.target.innerText)
+    document.getElementById('action-get-item').onclick = (e) => addActionToStack(ACTIONS.pick_up, e.target.innerText)
+    document.getElementById('action-use-key').onclick = (e) => addActionToStack(ACTIONS.use_key, e.target.innerText)
     document.getElementById('action-use-gun').onclick = (e) => addActionToStack(ACTIONS.use_gun, e.target.innerText)
     document.getElementById('action-use-stone').onclick = (e) => addActionToStack(ACTIONS.move, e.target.innerText)
 

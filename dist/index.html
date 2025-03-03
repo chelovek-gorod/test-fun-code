@@ -8,7 +8,7 @@
         <!-- viewport -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <!-- styles -->
-      <script type="module" crossorigin src="./assets/index-CqT3zUUu.js"></script>
+      <script type="module" crossorigin src="./assets/index-BIGTQnZ3.js"></script>
       <link rel="stylesheet" crossorigin href="./assets/index-f9Gfb4SE.css">
     </head>
 
@@ -28,9 +28,9 @@
                     
                         #control-container #action-stack {text-align: left; min-height: 30px; margin: 5px 20px; padding: 5px; border: 2px solid black; border-radius: 6px; font-size: 20px; background-color: white;}
                         #control-container button {border: 2px solid black; border-radius: 6px; font-size: 20px; padding: 5px; vertical-align: middle; cursor:pointer;}
-                        #control-container button.action {width: 60px; height: 60px; text-align: center; line-height: 30px; font-size: 30px;}
+                        #control-container button.action {width: 40px; height: 40px; text-align: center; line-height: 30px; font-size: 30px;}
                         #control-container button.apply {display: block; width: 320px; margin: 5px auto;}
-                        #control-container #action-status {width: 250px; height: 30px; margin: 5px auto; padding: 5px; font-size: 30px; line-height: 30px; border-radius: 12px; box-shadow: inset 0px 0px 13px 0px; background-color: white;}
+                        #control-container #action-status {width: 250px; height: 20px; margin: 10px auto; padding: 5px; font-size: 20px; line-height: 20px; border-radius: 12px; box-shadow: inset 0px 0px 12px 0px; background-color: white;}
                         #game-settings-container {text-align: center; }
                         #game-settings-container #clouds-speed {margin: 0 12px;}
                     </style>
@@ -69,14 +69,15 @@
                     <p>КОМАНДЫ:</p>
                     <div id="action-stack"></div>
                     <div id="action-status">Жду запуска...</div>
-                    <button class="action" id="action-go">⬆</button>
                     <button class="action" id="action-left">↶</button>
+                    <button class="action" id="action-go">⬆</button>
                     <button class="action" id="action-right">↷</button>
-                    <!--<button class="action" id="action-use-key">⚿</button>-->
+                    <p style="font-size: 6px;"></p>
+                    <button class="action" id="action-get-item">❒</button>
+                    <button class="action" id="action-use-key">⚿</button>
                     <button class="action" id="action-use-gun">🗲</button>
                     <button class="action" id="action-use-stone">⬤</button>
-                    <!--  ⚿ - использовать ключ &nbsp;&nbsp;  -->
-                    <p> 🗲 - использовать оружие &nbsp;&nbsp; ⬤ - толкнуть камень</p>
+                    <p> ❒ - поднять предмет &nbsp;&nbsp; ⚿ - использовать ключ &nbsp;&nbsp; 🗲 - использовать оружие &nbsp;&nbsp; ⬤ - толкать камень</p>
                     <hr>
                     <button class="apply" id="action-clear-all">⎚ очистить все команды</button>
                     <button class="apply" id="action-start">▶ ЗАПУСК</button>

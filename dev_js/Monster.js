@@ -15,6 +15,7 @@ export default class Monster extends AnimatedSprite {
         this.play()
 
         this.type = ITEM_TYPES.monster
+        this.callback = null
 
         EventHub.on( events.restart, this.restart, this )
     }
@@ -24,7 +25,8 @@ export default class Monster extends AnimatedSprite {
         this.alpha = 1
     }
 
-    getShut() {
+    getShut(callback) {
+        this.callback = callback
         tickerAdd(this)
         this.parent.parent.addChild( new Bird(this.parent.position.x, this.parent.position.y) )
         this.parent.parent.addChild( new Explosion(this.parent.position.x, this.parent.position.y) )
@@ -36,6 +38,10 @@ export default class Monster extends AnimatedSprite {
             this.alpha = 0
             tickerRemove(this)
             this.parent.removeItem( this )
+            if (this.callback) {
+                this.callback()
+                this.callback = null
+            }
         }
     }
 }

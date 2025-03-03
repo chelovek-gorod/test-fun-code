@@ -103,10 +103,15 @@ export default class Bot extends Container {
         }
 
         if (action === ACTIONS.forward) this.useMove()
+        else if (action === ACTIONS.pick_up) this.getItem()
         else if (action === ACTIONS.use_gun) this.useGun()
         else if (action === ACTIONS.use_key) this.useKey()
         else if (action === ACTIONS.move) this.moveStone()
-        else this.useTurn(action)
+        else if (action === ACTIONS.left || action === ACTIONS.right) this.useTurn(action)
+        else {
+            this.idle()
+            console.warn('GET UNKNOWN ACTION:', action)
+        }
     }
 
     /*
@@ -145,6 +150,43 @@ export default class Bot extends Container {
     }
     */
 
+    getItem() {
+        if (!this.parent.item) return this.idle()
+
+        if (this.parent.item.type === ITEM_TYPES.gun || this.parent.item.type === ITEM_TYPES.key) {
+            this.parent.getItem(this.inventory)
+
+            return this.checkAction()
+        }
+
+        return this.idle()
+    }
+
+    showLight(color, callback) {
+        const light = new AnimatedSprite(sprites.light.animations[color])
+        let lightLayerIndex = 2
+        if (this.side === DIRECTION.left || this.side === DIRECTION.up) {
+            light.anchor.set(0.9, 1.5)
+            const lightScaleX = this.side === DIRECTION.left ? 1 : -1
+            light.scale.set(lightScaleX, 1)
+            lightLayerIndex = 0
+        } else {
+            light.anchor.set(0.9, 0.25)
+            const lightScaleX = this.side === DIRECTION.right ? -1 : 1
+            light.scale.set(lightScaleX, -1)
+        }
+
+        light.loop = false
+        light.animationSpeed = 0.25
+        light.onComplete = () => {
+            this.removeChild(light)
+            light.destroy()
+            callback()
+        }
+        this.addChildAt(light, lightLayerIndex)
+        light.play()
+    }
+
     useGun() {
         this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
         if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
@@ -153,16 +195,34 @@ export default class Bot extends Container {
             // check gun
             if (!this.inventory.checkItem( ITEM_TYPES.gun )) return this.idle()
 
-            this.targetCeil.item.getShut()
-
-            return setTimeout( () => this.checkAction(), 1200 )
+            this.showLight('purple', () => {
+                this.targetCeil.item.getShut( () => this.checkAction() )
+            })
+            
+            return
         }
 
         return this.idle()
     }
 
     useKey() {
-        // not used now
+        this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
+        if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
+
+        if (this.targetCeil.item.type === ITEM_TYPES.door) {
+            // check color
+            const doorColor = this.targetCeil.item.color
+            // check key
+            if (!this.inventory.checkItem( 'key_' + doorColor )) return this.idle()
+
+            this.showLight(doorColor, () => {
+                this.targetCeil.item.open()
+                this.checkAction()
+            })
+            
+            return
+        }
+
         return this.idle()
     }
 
@@ -204,7 +264,7 @@ export default class Bot extends Container {
         this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
 
         if (!this.targetCeil) return this.idle()
-        if (!this.targetCeil.checkMove( this.inventory )) return this.idle()
+        if (!this.targetCeil.isOpen) return this.idle()
 
         this.image.loop = false
         this.image.textures = sprites.bot.animations["start_" + this.side]

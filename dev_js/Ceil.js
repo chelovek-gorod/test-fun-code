@@ -35,7 +35,11 @@ export default class Ceil extends Container {
     }
 
     addItem(item, isStartOption = false) {
-        if (item === null || item.type === ITEM_TYPES.target || item.type === ITEM_TYPES.bot) {
+        if (item === null
+        || item.type === ITEM_TYPES.target
+        || item.type === ITEM_TYPES.key
+        || item.type === ITEM_TYPES.gun
+        || item.type === ITEM_TYPES.bot) {
             this.isOpen = true
         } else {
             this.isOpen = false
@@ -61,32 +65,17 @@ export default class Ceil extends Container {
         return item
     }
 
-    checkMove( inventory ) {
-        if (this.isOpen) return this.isOpen
-
+    getItem( inventory ) {
         if (this.item.type === ITEM_TYPES.gun) {
-            this.isOpen = true
             const gun = this.removeItem()
             this.parent.addChild(gun)
             inventory.addItem(gun, 'gun')
-            return true
-        }
-
-        if (this.item.type === ITEM_TYPES.key) {
-            this.isOpen = true
+        } else if (this.item.type === ITEM_TYPES.key) {
             const key = this.removeItem()
             this.parent.addChild(key)
             inventory.addItem(key, 'key_' + key.color)
-            return true
+        } else {
+            console.warn('NO KEY OR GUN IN CEIL !!!')
         }
-
-        if (this.item.type === ITEM_TYPES.door
-        && inventory.checkItem( 'key_' + this.item.color )) {
-            this.isOpen === true
-            this.item.open()
-            return true
-        }
-
-        return this.isOpen
     }
 }

@@ -33,7 +33,7 @@ export function startGame(gameData) {
     }
     
     const staticBgIndexes = 0
-    const tiledBgIndexes = 5
+    const tiledBgIndexes = 8
     const maxBgIndex = tiledBgIndexes + staticBgIndexes
     EventHub.on( events.changeBg, () => {
         game.bg.index++
@@ -134,7 +134,7 @@ function fillGameArea(ceils, inventory, gameData) {
             ceils.addChild(ceil)
         }
 
-        // TEST BOT ANGLE
+        // test bot
         if (i === 46) {
             const testBot = new AnimatedSprite(sprites.bot_idle.animations.idle)
             testBot.animationSpeed = 0.35

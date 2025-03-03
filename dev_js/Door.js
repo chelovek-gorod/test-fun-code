@@ -35,6 +35,7 @@ export default class Door extends AnimatedSprite {
     }
 
     open() {
+        this.parent.isOpen = true
         this.animationSpeed = 0.5
         this.isOpen = true
         this.loop = false
