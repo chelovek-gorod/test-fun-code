@@ -42,7 +42,8 @@ export const sprites = {
 
     keys:'keys2.json',
     gun:'gun.json',
-    monster:'monster.json',
+    monster:'enemy.json',
+    explosion: 'explosion.json',
     static_stone: 'stone.png',
 
     flower: 'flower.json',

@@ -10,7 +10,6 @@ import Ceil from "./Ceil"
 import Inventory from "./Inventory"
 import Door from "./Door"
 import Cloud from "./Cloud"
-import Bird from "./Bird"
 import Stone from "./Stone"
 import Monster from "./Monster"
 import Item from "./Item"
@@ -65,11 +64,6 @@ export function startGame(gameData) {
         game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
     }
 
-    game.birdContainer = new Container()
-    for(let b = 0; b < 3; b++) {
-        game.birdContainer.addChild( new Bird() )
-    }
-
     game.inventory = new Inventory(gameData.inventory)
     game.mainContainer.addChild(game.inventory)
 
@@ -81,7 +75,6 @@ export function startGame(gameData) {
 
     sceneAdd( game.cloudContainer )
     sceneAdd( game.mainContainer )
-    sceneAdd( game.birdContainer )
 }
 
 function screenResize(screenData) { 
@@ -104,7 +97,6 @@ function screenResize(screenData) {
     game.inventory.position.y = MAP_OFFSET * 0.5
 
     game.cloudContainer.children.forEach( cloud => cloud.setSizes(screenData.width, screenData.height, scale) )
-    game.birdContainer.children.forEach( bird => bird.setSizes(screenData.width, screenData.height, scale) )
 }
 
 function fillGameArea(ceils, inventory, gameData) {

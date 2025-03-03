@@ -93,7 +93,7 @@ export default class Bot extends Container {
         this.image.play()
     }
 
-    checkAction() { console.log('get action', this.commands.length ? this.commands[this.commands.length -1] : '[ ]' )
+    checkAction() {// console.log('get action', this.commands.length ? this.commands[this.commands.length -1] : '[ ]' )
         const action = this.commands.pop()
         if (!action) {
             if(this.parent.item && this.parent.item.type === ITEM_TYPES.target) {
@@ -103,10 +103,13 @@ export default class Bot extends Container {
         }
 
         if (action === ACTIONS.forward) this.useMove()
-        else if (action === ACTIONS.use) this.useItem()
+        else if (action === ACTIONS.use_gun) this.useGun()
+        else if (action === ACTIONS.use_key) this.useKey()
+        else if (action === ACTIONS.move) this.moveStone()
         else this.useTurn(action)
     }
 
+    /*
     useItem() {
         this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
         if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
@@ -134,7 +137,54 @@ export default class Bot extends Container {
             if (!this.inventory.checkItem( ITEM_TYPES.gun )) return this.idle()
 
             this.targetCeil.item.getShut()
-            return this.checkAction()
+
+            return setTimeout( () => this.checkAction(), 2000 )
+        }
+
+        return this.idle()
+    }
+    */
+
+    useGun() {
+        this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
+        if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
+
+        if (this.targetCeil.item.type === ITEM_TYPES.monster) {
+            // check gun
+            if (!this.inventory.checkItem( ITEM_TYPES.gun )) return this.idle()
+
+            this.targetCeil.item.getShut()
+
+            return setTimeout( () => this.checkAction(), 1200 )
+        }
+
+        return this.idle()
+    }
+
+    useKey() {
+        // not used now
+        return this.idle()
+    }
+
+    moveStone() {
+        this.targetCeil = this.getTargetPoint(this.parent.position.x, this.parent.position.y)
+        if (!this.targetCeil || !this.targetCeil.item || this.targetCeil.isOpen) return this.idle()
+
+        if (this.targetCeil.item.type === ITEM_TYPES.stone) {
+            const ceilAfterStone = this.getTargetPoint(this.targetCeil.x, this.targetCeil.y)
+
+            // check that ceil exist and ceil without any items
+            if (!ceilAfterStone || ceilAfterStone.item ) return this.idle()
+
+            this.speed = STONE_SPEED
+            this.image.loop = false
+            this.image.textures = sprites.bot.animations["start_" + this.side]
+            this.image.onComplete = () => {
+                this.targetCeil.item.move( this.side, ceilAfterStone )
+                this.startMove()
+            }
+            
+            return this.image.gotoAndPlay(0)
         }
 
         return this.idle()

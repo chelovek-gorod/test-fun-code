@@ -3,12 +3,14 @@ import { sprites } from "./engine/loader"
 import { tickerAdd, tickerRemove } from "./engine/application"
 import { EventHub, events } from './engine/events'
 import { ITEM_TYPES } from "./constants"
+import Explosion from "./Explosion"
+import Bird from "./Bird"
 
 export default class Monster extends AnimatedSprite {
     constructor(side) {
-        super(sprites.monster.animations.monster)
+        super(sprites.monster.animations.idle)
         if (side < 3) this.scale.set(-1, 1)
-        this.anchor.set(0.5, 0.9)
+        this.anchor.set(0.5, 0.87)
         this.animationSpeed = 0.5
         this.play()
 
@@ -23,15 +25,17 @@ export default class Monster extends AnimatedSprite {
     }
 
     getShut() {
-        this.parent.removeItem( this )
         tickerAdd(this)
+        this.parent.parent.addChild( new Bird(this.parent.position.x, this.parent.position.y) )
+        this.parent.parent.addChild( new Explosion(this.parent.position.x, this.parent.position.y) )
     }
 
     tick(time) {
-        this.alpha -= 0.0001 * time.deltaMS
+        this.alpha -= 0.002 * time.deltaMS
         if (this.alpha <= 0) {
             this.alpha = 0
             tickerRemove(this)
+            this.parent.removeItem( this )
         }
     }
 }

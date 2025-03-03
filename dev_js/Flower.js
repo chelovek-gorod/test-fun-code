@@ -23,7 +23,6 @@ export default class Flower extends AnimatedSprite {
     tick(time) {
         if (this.isGrow) {
             this.scale.set(this.scale.x + this.growSpeed * time.deltaMS)
-            console.log(this.scale.x)
             if (this.scale.x >= 1) {
                 this.isGrow = false
                 this.scale.set(1)
