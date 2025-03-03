@@ -74,16 +74,22 @@ export default class Inventory extends Container {
     }
 
     addItem( item, item_name ) {
-        this.collectedItems.push( item )
-        item.targetPoint = {
-            x: this.slotsPoints[this.slots.length].x,
-            y: this.slotsPoints[this.slots.length].y
+        if (this.checkItem(item_name)) {
+            item.targetPoint = null
+        } else {
+            item.targetPoint = {
+                x: this.slotsPoints[this.slots.length].x,
+                y: this.slotsPoints[this.slots.length].y
+            }
+            this.slots.push(item_name)
         }
+
+        this.collectedItems.push( item )
+        
         item.moveRate = {
             x: (this.itemsTargetX - item.x) / 600,
             y: (this.itemsTargetY - item.y) / 600
         }
-        this.slots.push(item_name)
     }
 
     checkItem( item_name ) {
@@ -111,13 +117,14 @@ export default class Inventory extends Container {
             // add item in slots
             if (item.x === this.itemsTargetX && item.y === this.itemsTargetY) {
                 item.parent.removeChild( item )
-                this.addChild(item)
-                item.position.set(item.targetPoint.x, item.targetPoint.y)
-                item.anchor.set(0.5)
-                item.targetPoint = null
+                if (item.targetPoint) {
+                    this.addChild(item)
+                    item.position.set(item.targetPoint.x, item.targetPoint.y)
+                    item.anchor.set(0.5)
+                    item.targetPoint = null
+                }
+                this.collectedItems = this.collectedItems.filter(collectedItem => collectedItem !== item)
             }
         })
-
-        this.collectedItems = this.collectedItems.filter(item => item.targetPoint !== null)
     }
 }

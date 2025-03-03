@@ -29,19 +29,19 @@ function awaitLevel() {
 ////////////////////////////////////
 
 let startMap = {
-    "map":[
-        [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
-        [ 0,  0,  1,  1,  1,  0,  0,  1,  1],
-        [ 1,  1,  1,  0,  1,  0,  0,  1,  0],
-        [ 1,  0,  0,  0,  1,  0,  0,  1,  0],
-        [91,  0, 93,  8,  1,  1,  0,  0,  0],
-        [51,  0,  1,  1,  0,  0,  1,  1, 61],
-        [ 1,  0,  7,  1,  0,  0,  1,  2,  1],
-        [ 3,  0,  0,  1, 43,  1,  1,  1,  1],
-        [ 0,  0,  0,  0,  0,  0,  0,  0,  0],
+    "map": [
+        [  1,  1, 42, 92,  1,  0,  1 ],
+        [  1,  0,  0,  0,  1,  0,  1 ],
+        [ 91,  0,  1,  8,  1,  1,  0 ],
+        [  1,  0, 54,  0,  0,  0,  0 ],
+        [ 51,  0, 93,  0,  2,  1, 61 ],
+        [  1,  0,  1,  0,  1,  1,  1 ],
+        [  3,  0,  7, 43, 64,  1, 62 ]
     ],
     "botDirection": "down",
-    "inventory":["key_green"]
+    "inventory": [
+        "key_green"
+    ]
 }
 const maxInventorySize = 5
 
@@ -168,7 +168,10 @@ document.body.onload = () => {
 function updateJSON() {
     const data = {...startMap}
     data.map = startMap.map.map(arr => `[ ${arr.join(', ')} ]`)
-    document.getElementById('jsonValue').value = JSON.stringify(data, null, 4)
+    let stringData = JSON.stringify(data, null, 4)
+    stringData = stringData.replaceAll('"[', '[')
+    stringData = stringData.replaceAll(']"', ']')
+    document.getElementById('jsonValue').value = stringData
 }
 
 function changeInventorySettings(inventoryCeil) {

@@ -135,7 +135,7 @@ function fillGameArea(ceils, inventory, gameData) {
         }
 
         // test bot
-        if (i === 46) {
+        if (i === 21) {
             const testBot = new AnimatedSprite(sprites.bot_idle.animations.idle)
             testBot.animationSpeed = 0.35
             testBot.anchor.set(0.5, 0.95)
@@ -156,7 +156,7 @@ function fillGameArea(ceils, inventory, gameData) {
         // end test bot
 
         // test flower
-        if (i === 45) {
+        if (i === 28) {
             const flower = new Flower()
             flower.position.set(
                 point.x * CEIL_HALF_SIZE + MAP_OFFSET,
