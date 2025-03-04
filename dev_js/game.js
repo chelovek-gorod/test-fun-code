@@ -41,7 +41,6 @@ export function startGame(gameData) {
         game.bg.texture = sprites['bg_' + game.bg.index]
 
         if(game.bg.index > tiledBgIndexes) {
-            console.log(game.bg.index - tiledBgIndexes)
             game.staticBG.texture = sprites['sbg_' + (game.bg.index - tiledBgIndexes)]
         }
     })
@@ -61,7 +60,8 @@ export function startGame(gameData) {
 
     game.cloudContainer = new Container()
     for(let i = 0; i < CLOUDS.count; i++) {
-        game.cloudContainer.addChild( new Cloud( (i % 7) + 1 ) )
+        game.cloudContainer.addChild( new Cloud( (i % 5) + 1 ) )
+        // game.cloudContainer.addChild( new Cloud( (i % 7) + 1 ) )
     }
 
     game.inventory = new Inventory(gameData.inventory)

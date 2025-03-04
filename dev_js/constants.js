@@ -10,7 +10,7 @@ export const MAP_OFFSET_TOP = MAP_OFFSET * 2 + INVENTORY_CEIL_SIZE
 export const UI_WIDTH = 300
 export const ARROW_ANIMATION_DURATION = 200
 export const BOT_SPEED = 0.1
-export const STONE_SPEED = 0.05
+export const STONE_SPEED = 0.02
 export const DIRECTION = {
     left: 'left',
     right: 'right',
@@ -59,7 +59,7 @@ export const KEY_COLORS_INDEX = {
 
 export const CLOUDS = {
     scale: 0.75,
-    count: 50,
+    count: 75,
     minSpeed: 0.05,
     maxSpeed: 0.1,
     speedRateX: 0.6,
